@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { AssessmentResult, SeverityLevel } from '../types/assessment';
-import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 interface ResultsSummaryProps {
   result: AssessmentResult;
   onRetake: () => void;
   onCrisisClick: () => void;
+  onUpgradeToDeep?: () => void;
   language: Language;
 }
 
@@ -15,7 +16,7 @@ const severityConfig: Record<Language, Record<SeverityLevel, { label: string; co
     minimal: {
       label: 'Мінімальний рівень',
       color: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800',
-      desc: 'Ваші відповіді не свідчать про наявність клінічно значущих депресивних або тривожних симптомів.',
+      desc: 'Ваші відповіді не свідчать про наявність клінічно значущих симптомів. Поточний емоційний стан у межах норми.',
     },
     mild: {
       label: 'Легкий рівень',
@@ -25,17 +26,17 @@ const severityConfig: Record<Language, Record<SeverityLevel, { label: string; co
     moderate: {
       label: 'Помірний рівень',
       color: 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800',
-      desc: 'Симптоми відчутно впливають на працездатність, настрій та якість життя. Варто приділити увагу своєму стану.',
+      desc: 'Симптоми відчутно впливають на працездатність, настрій та якість життя. Варто звернути увагу на відновлення ресурсу.',
     },
     moderately_severe: {
       label: 'Виражений рівень',
       color: 'bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border-orange-300 dark:border-orange-800',
-      desc: 'Симптоми суттєво обмежують активність. Рекомендується обговорити результат із фахівцем (психотерапевтом).',
+      desc: 'Симптоми суттєво обмежують активність. Рекомендується обговорити результат із фахівцем (психологом чи психотерапевтом).',
     },
     severe: {
       label: 'Тяжкий рівень',
       color: 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-300 dark:border-rose-800',
-      desc: 'Виражений дистрес, який потребує професійної медико-психологічної оцінки (психіатр, клінічний психолог).',
+      desc: 'Виражений дистрес, який потребує фахової медико-психологічної оцінки (психіатр, клінічний психолог).',
     },
   },
   en: {
@@ -79,7 +80,7 @@ const severityConfig: Record<Language, Record<SeverityLevel, { label: string; co
     moderate: {
       label: 'Nivel Moderado',
       color: 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800',
-      desc: 'Los síntomas afectan perceptiblemente su rutina y bienestar. Se recomienda apoyo psicológico.',
+      desc: 'Los síntomas afectan su rutina y bienestar. Se recomienda apoyo psicológico.',
     },
     moderately_severe: {
       label: 'Moderadamente Grave',
@@ -125,9 +126,11 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   result,
   onRetake,
   onCrisisClick,
+  onUpgradeToDeep,
   language,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [showUpgradeCard, setShowUpgradeCard] = useState(true);
   const t = translations[language];
   const langConfig = severityConfig[language] || severityConfig['uk'];
   const depSeverity = langConfig[result.depressionLevel];
@@ -155,84 +158,171 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
     setTimeout(() => setCopied(false), 3000);
   };
 
+  // Severity progress percentage for visual bar
+  const depPercent = Math.min(100, Math.round((result.depressionScore / 27) * 100));
+  const anxPercent = result.anxietyScore !== undefined ? Math.min(100, Math.round((result.anxietyScore / 21) * 100)) : 0;
+
   return (
     <div className="space-y-6 animate-fade-in pb-12">
       {/* Disclaimer Banner */}
-      <div className="bg-slate-100/90 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-2xl text-xs sm:text-sm leading-relaxed">
-        <strong>{t.disclaimer}</strong>
+      <div className="bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 p-4 rounded-3xl text-xs sm:text-sm leading-relaxed flex items-start gap-3">
+        <ShieldCheck className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+        <p className="font-medium">{t.disclaimer}</p>
       </div>
 
+      {/* COMPASSIONATE UPGRADE OFFER: Express -> Deep Research */}
+      {result.mode === 'express' && showUpgradeCard && onUpgradeToDeep && (
+        <div className="relative overflow-hidden bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50 dark:from-teal-950/50 dark:via-cyan-950/40 dark:to-slate-900 rounded-3xl border-2 border-teal-300/80 dark:border-teal-700/80 p-6 sm:p-7 shadow-lg shadow-teal-500/5 animate-fade-in">
+          <div className="flex items-start gap-4">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+              <Sparkles className="w-6 h-6" />
+            </div>
+
+            <div className="space-y-2 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-300 bg-teal-100/80 dark:bg-teal-900/60 px-2.5 py-0.5 rounded-full">
+                  Продовження тестування
+                </span>
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white leading-tight">
+                {t.upgradeToDeepTitle}
+              </h3>
+
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                {t.upgradeToDeepDesc}
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 pt-3">
+                <button
+                  type="button"
+                  onClick={onUpgradeToDeep}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white shadow-md shadow-teal-600/20 transition active:scale-[0.99] cursor-pointer"
+                >
+                  <span>{t.upgradeToDeepBtn}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowUpgradeCard(false)}
+                  className="px-4 py-3 rounded-2xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/5 transition"
+                >
+                  {t.upgradeToDeepDecline}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Score Cards */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 space-y-6">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500">
               {t.resultTitle}
             </span>
-            <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-0.5">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-0.5">
               {t.resultProfile}
             </h2>
           </div>
-          <span className="text-xs text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full font-bold border border-teal-200 dark:border-teal-800">
-            {result.mode === 'express' ? '⚡ Express' : '🔬 Deep Research'}
+          <span className="text-xs font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/70 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs">
+            {result.mode === 'express' ? '⚡ Express (PHQ-9)' : '🔬 Deep Research (PHQ-9 + GAD-7)'}
           </span>
         </div>
 
         {/* Depression Score Block */}
-        <div className="p-5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-900 dark:text-white text-base">{t.depTitle}</span>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${depSeverity.color}`}>
-                {depSeverity.label}
-              </span>
+        <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-850/60 border border-slate-200/70 dark:border-slate-800/80 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">{t.depTitle}</span>
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${depSeverity.color}`}>
+                  {depSeverity.label}
+                </span>
+              </div>
+              <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+                {depSeverity.desc}
+              </p>
             </div>
-            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
-              {depSeverity.desc}
-            </p>
+            <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
+              <span className="text-3xl font-black text-slate-900 dark:text-white">{result.depressionScore}</span>
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500"> / 27 {t.points}</span>
+            </div>
           </div>
-          <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
-            <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{result.depressionScore}</span>
-            <span className="text-xs font-medium text-slate-400 dark:text-slate-500"> / 27 {t.points}</span>
+
+          {/* Clinical Visual Gauge Bar */}
+          <div className="space-y-1.5 pt-2">
+            <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+              <span>0 (Мінімум)</span>
+              <span>10 (Помірний)</span>
+              <span>20 (Тяжкий)</span>
+              <span>27</span>
+            </div>
+            <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 transition-all duration-700 ease-out"
+                style={{ width: `${depPercent}%` }}
+              />
+            </div>
           </div>
         </div>
 
         {/* Anxiety Score Block (if deep assessment) */}
         {result.anxietyScore !== undefined && anxSeverity && (
-          <div className="p-5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-900 dark:text-white text-base">{t.anxTitle}</span>
-                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${anxSeverity.color}`}>
-                  {anxSeverity.label}
-                </span>
+          <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-850/60 border border-slate-200/70 dark:border-slate-800/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">{t.anxTitle}</span>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${anxSeverity.color}`}>
+                    {anxSeverity.label}
+                  </span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+                  {anxSeverity.desc}
+                </p>
               </div>
-              <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
-                {anxSeverity.desc}
-              </p>
+              <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                <span className="text-3xl font-black text-slate-900 dark:text-white">{result.anxietyScore}</span>
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500"> / 21 {t.points}</span>
+              </div>
             </div>
-            <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-2xs">
-              <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">{result.anxietyScore}</span>
-              <span className="text-xs font-medium text-slate-400 dark:text-slate-500"> / 21 {t.points}</span>
+
+            {/* Anxiety Visual Gauge */}
+            <div className="space-y-1.5 pt-2">
+              <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                <span>0 (Мінімум)</span>
+                <span>10 (Помірний)</span>
+                <span>15 (Виражений)</span>
+                <span>21</span>
+              </div>
+              <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-teal-500 via-yellow-500 to-rose-500 transition-all duration-700 ease-out"
+                  style={{ width: `${anxPercent}%` }}
+                />
+              </div>
             </div>
           </div>
         )}
 
         {/* Crisis Alert if flagged */}
         {result.crisisFlag && (
-          <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <span className="font-bold text-rose-900 dark:text-rose-200 text-sm">{t.crisisAlertTitle}</span>
-              <p className="text-xs text-rose-800 dark:text-rose-300 leading-relaxed">
+          <div className="p-5 rounded-3xl bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-200 dark:border-rose-900 flex items-start gap-3.5">
+            <AlertTriangle className="w-6 h-6 text-rose-600 dark:text-rose-400 shrink-0 mt-0.5" />
+            <div className="space-y-1.5">
+              <span className="font-extrabold text-rose-900 dark:text-rose-200 text-sm">{t.crisisAlertTitle}</span>
+              <p className="text-xs sm:text-sm text-rose-800 dark:text-rose-300 leading-relaxed">
                 {t.crisisAlertDesc}
               </p>
               <button
                 type="button"
                 onClick={onCrisisClick}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 dark:hover:text-rose-300 underline underline-offset-2 pt-1"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 dark:hover:text-rose-200 underline underline-offset-4 pt-1"
               >
-                <Heart className="w-3.5 h-3.5" />
+                <Heart className="w-4 h-4" />
                 {t.crisisAlertLink}
               </button>
             </div>
@@ -242,12 +332,12 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         {/* Insights list */}
         {result.insights.length > 0 && (
           <div className="pt-2">
-            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wide mb-3">
+            <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
               {t.insightsTitle}
             </h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2.5">
               {result.insights.map((insight, idx) => (
-                <li key={idx} className="flex items-start gap-2.5 text-sm text-slate-700 dark:text-slate-300">
+                <li key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-850/50 border border-slate-200/60 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300">
                   <CheckCircle2 className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
                   <span>{insight}</span>
                 </li>
@@ -258,12 +348,12 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
 
         {/* Recommendations list */}
         <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
-          <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wide mb-3">
+          <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
             {t.recommendationsTitle}
           </h3>
-          <ul className="space-y-2.5">
+          <ul className="space-y-3">
             {result.recommendations.map((rec, idx) => (
-              <li key={idx} className="p-3.5 bg-slate-50/80 dark:bg-slate-800/60 rounded-2xl border border-slate-200/50 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              <li key={idx} className="p-4 bg-slate-50/80 dark:bg-slate-850/60 rounded-2xl border border-slate-200/50 dark:border-slate-700/80 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                 {rec}
               </li>
             ))}
@@ -274,12 +364,12 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-sm font-bold text-slate-900 dark:text-white block">{t.copyDoctorReport}</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Скопіюйте стисле резюме симптомів, щоб полегшити розмову на прийомі</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Скопіюйте стисле резюме симптомів для комфортного обговорення на прийомі</p>
           </div>
           <button
             type="button"
             onClick={handleCopyReport}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer active:scale-95"
           >
             {copied ? (
               <>
@@ -301,10 +391,10 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         <button
           type="button"
           onClick={onRetake}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer active:scale-95"
         >
           <RotateCcw className="w-4 h-4" />
-          {t.retakeBtn}
+          <span>{t.retakeBtn}</span>
         </button>
       </div>
     </div>
