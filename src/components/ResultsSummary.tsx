@@ -143,15 +143,26 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const langConfig = severityConfig[language] || severityConfig['uk'];
   const depSeverity = langConfig[result.depressionLevel];
   const anxSeverity = result.anxietyLevel ? langConfig[result.anxietyLevel] : null;
+  const stressSeverity = result.stressLevel ? langConfig[result.stressLevel] : null;
+
+  const modeBadge =
+    result.mode === 'express'
+      ? { icon: '⚡', label: 'Express (PHQ-9)' }
+      : result.mode === 'deep'
+      ? { icon: '🔬', label: 'Deep Research (PHQ-9 + GAD-7)' }
+      : { icon: '📊', label: 'DASS-21 (UNSW Triad)' };
+
+  const depMax = result.mode === 'dass21' ? 21 : 27;
 
   const handleCopyReport = () => {
     const reportText = `=== MindCheck: ${t.resultTitle} ===
 ${t.title}: ${result.completionDate}
 ${result.birthYear ? `${t.birthYearLabel}: ${result.birthYear}` : ''}
-${t.selectedFormat}: ${result.mode === 'express' ? 'Express (PHQ-9)' : 'Deep Research (PHQ-9 + GAD-7)'}
+${t.selectedFormat}: ${modeBadge.label}
 
-1. ${t.depTitle}: ${result.depressionScore}/27 (${depSeverity.label})
+1. ${t.depTitle}: ${result.depressionScore}/${depMax} (${depSeverity.label})
 ${result.anxietyScore !== undefined && anxSeverity ? `2. ${t.anxTitle}: ${result.anxietyScore}/21 (${anxSeverity.label})` : ''}
+${result.stressScore !== undefined && stressSeverity ? `3. ${t.stressTitle}: ${result.stressScore}/21 (${stressSeverity.label})` : ''}
 
 ${t.insightsTitle}:
 ${result.insights.map((i) => `• ${i}`).join('\n') || '• N/A'}
@@ -167,8 +178,9 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
   };
 
   // Severity progress percentage for visual bar
-  const depPercent = Math.min(100, Math.round((result.depressionScore / 27) * 100));
+  const depPercent = Math.min(100, Math.round((result.depressionScore / depMax) * 100));
   const anxPercent = result.anxietyScore !== undefined ? Math.min(100, Math.round((result.anxietyScore / 21) * 100)) : 0;
+  const stressPercent = result.stressScore !== undefined ? Math.min(100, Math.round((result.stressScore / 21) * 100)) : 0;
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
@@ -237,8 +249,8 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
           </div>
           <div className="self-start sm:self-center shrink-0">
             <span className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/70 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs leading-none">
-              <span className="text-sm leading-none">{result.mode === 'express' ? '⚡' : '🔬'}</span>
-              <span>{result.mode === 'express' ? 'Express (PHQ-9)' : 'Deep Research (PHQ-9 + GAD-7)'}</span>
+              <span className="text-sm leading-none">{modeBadge.icon}</span>
+              <span>{modeBadge.label}</span>
             </span>
           </div>
         </div>
@@ -259,7 +271,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
             </div>
             <div className="sm:text-right shrink-0 bg-white dark:bg-slate-900 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
               <span className="text-3xl font-black text-slate-900 dark:text-white">{result.depressionScore}</span>
-              <span className="text-xs font-semibold text-slate-400 dark:text-slate-400"> / 27 {t.points}</span>
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-400"> / {depMax} {t.points}</span>
             </div>
           </div>
 
@@ -267,9 +279,9 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
           <div className="space-y-1.5 pt-2">
             <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
               <span>0 ({t.gaugeMin})</span>
-              <span>10 ({t.gaugeMod})</span>
-              <span>20 ({t.gaugeSev})</span>
-              <span>27</span>
+              <span>{result.mode === 'dass21' ? '7' : '10'} ({t.gaugeMod})</span>
+              <span>{result.mode === 'dass21' ? '14' : '20'} ({t.gaugeSev})</span>
+              <span>{depMax}</span>
             </div>
             <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
               <div
@@ -313,6 +325,45 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
                 <div
                   className={`h-full rounded-full transition-all duration-700 ease-out shadow-xs ${severityBarGradient[result.anxietyLevel!]}`}
                   style={{ width: `${anxPercent}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Stress Score Block (DASS-21) */}
+        {result.stressScore !== undefined && stressSeverity && (
+          <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg leading-snug">{t.stressTitle}</span>
+                  <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold leading-none border shrink-0 ${stressSeverity.color}`}>
+                    {stressSeverity.label}
+                  </span>
+                </div>
+                <p className="text-slate-600 dark:text-slate-200 text-xs sm:text-sm leading-relaxed max-w-lg">
+                  {stressSeverity.desc}
+                </p>
+              </div>
+              <div className="sm:text-right shrink-0 bg-white dark:bg-slate-900 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
+                <span className="text-3xl font-black text-slate-900 dark:text-white">{result.stressScore}</span>
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-400"> / 21 {t.points}</span>
+              </div>
+            </div>
+
+            {/* Stress Visual Gauge */}
+            <div className="space-y-1.5 pt-2">
+              <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                <span>0 ({t.gaugeMin})</span>
+                <span>10 ({t.gaugeMod})</span>
+                <span>15 ({t.gaugeHigh})</span>
+                <span>21</span>
+              </div>
+              <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
+                <div
+                  className={`h-full rounded-full transition-all duration-700 ease-out shadow-xs ${severityBarGradient[result.stressLevel!]}`}
+                  style={{ width: `${stressPercent}%` }}
                 />
               </div>
             </div>

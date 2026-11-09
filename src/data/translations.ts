@@ -82,6 +82,12 @@ export interface TranslationStrings {
   birthYearLabel: string;
   expressBadge: string;
   deepBadge: string;
+  dassBadge: string;
+  dassTitle: string;
+  dassTime: string;
+  dassDesc: string;
+  stressTitle: string;
+  stressDesc: string;
   continueAssessmentTag: string;
   themeLight: string;
   themeDark: string;
@@ -172,6 +178,12 @@ export const translations: Record<Language, TranslationStrings> = {
     birthYearLabel: 'Рік народження',
     expressBadge: '⚡ 9 питань (5 хв)',
     deepBadge: '🔬 20 питань (10 хв)',
+    dassBadge: '📊 21 питання (6 хв)',
+    dassTitle: '📊 DASS-21 (Баланс стресу)',
+    dassTime: '5–7 хвилин • 21 питання',
+    dassDesc: 'Комплексна валідована тріада (UNSW). Вимірює три стани окремо: рівень хронічного стресу / вигорання, тривожності та депресії.',
+    stressTitle: 'Рівень стресу та виснаження',
+    stressDesc: 'Хронічне напруження, дратівливість, виснаження нервової системи та труднощі з розслабленням.',
     continueAssessmentTag: 'Продовження тестування',
     themeLight: 'Світлий режим',
     themeDark: 'Нічний режим',
@@ -260,6 +272,12 @@ export const translations: Record<Language, TranslationStrings> = {
     birthYearLabel: 'Birth year',
     expressBadge: '⚡ 9 questions (5 min)',
     deepBadge: '🔬 20 questions (10 min)',
+    dassBadge: '📊 21 questions (6 min)',
+    dassTitle: '📊 DASS-21 (Stress Balance)',
+    dassTime: '5–7 minutes • 21 questions',
+    dassDesc: 'Comprehensive validated triad (UNSW). Separately assesses chronic stress / burnout, anxiety, and depression levels.',
+    stressTitle: 'Stress & Burnout Level',
+    stressDesc: 'Chronic tension, irritability, nervous exhaustion, and difficulty unwinding.',
     continueAssessmentTag: 'Extend Assessment',
     themeLight: 'Light mode',
     themeDark: 'Dark mode',
@@ -348,6 +366,12 @@ export const translations: Record<Language, TranslationStrings> = {
     birthYearLabel: 'Año de nacimiento',
     expressBadge: '⚡ 9 preguntas (5 min)',
     deepBadge: '🔬 20 preguntas (10 min)',
+    dassBadge: '📊 21 preguntas (6 min)',
+    dassTitle: '📊 DASS-21 (Balance de estrés)',
+    dassTime: '5–7 minutos • 21 preguntas',
+    dassDesc: 'Tríada validada integral (UNSW). Evalúa por separado los niveles de estrés crónico / agotamiento, ansiedad y depresión.',
+    stressTitle: 'Nivel de estrés y agotamiento',
+    stressDesc: 'Tensión crónica, irritabilidad, fatiga nerviosa y dificultad para relajarse.',
     continueAssessmentTag: 'Continuar evaluación',
     themeLight: 'Modo claro',
     themeDark: 'Modo oscuro',
@@ -436,6 +460,12 @@ export const translations: Record<Language, TranslationStrings> = {
     birthYearLabel: 'Ano de nascimento',
     expressBadge: '⚡ 9 perguntas (5 min)',
     deepBadge: '🔬 20 perguntas (10 min)',
+    dassBadge: '📊 21 perguntas (6 min)',
+    dassTitle: '📊 DASS-21 (Balanço de stress)',
+    dassTime: '5–7 minutos • 21 perguntas',
+    dassDesc: 'Tríade validada abrangente (UNSW). Avalia separadamente os níveis de stress crónico / esgotamento, ansiedade e depressão.',
+    stressTitle: 'Nível de stress e esgotamento',
+    stressDesc: 'Tensão crónica, irritabilidade, fadiga nervosa e dificuldade em relaxar.',
     continueAssessmentTag: 'Continuar avaliação',
     themeLight: 'Modo claro',
     themeDark: 'Modo escuro',

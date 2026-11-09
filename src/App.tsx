@@ -273,7 +273,7 @@ export default function App() {
                   >
                     <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedFormat}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                      {mode === 'express' ? t.expressBadge : t.deepBadge}
+                      {mode === 'express' ? t.expressBadge : mode === 'deep' ? t.deepBadge : t.dassBadge}
                     </span>
                   </button>
                 </div>
@@ -332,7 +332,13 @@ export default function App() {
             <AssessmentProgress
               currentStep={currentStep}
               totalSteps={questions.length}
-              stageTitle={mode === 'express' ? `${t.expressTitle} (${questions.length})` : `${t.deepTitle} (${questions.length})`}
+              stageTitle={
+                mode === 'express'
+                  ? `${t.expressTitle} (${questions.length})`
+                  : mode === 'deep'
+                  ? `${t.deepTitle} (${questions.length})`
+                  : `${t.dassTitle} (${questions.length})`
+              }
               language={language}
             />
 

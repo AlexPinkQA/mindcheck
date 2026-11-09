@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Globe, Calendar, Zap, Microscope, X, ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
+import { Globe, Calendar, Zap, Microscope, Activity, X, ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 import { AssessmentMode } from '../types/assessment';
 
@@ -353,6 +353,49 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     }`}
                   >
                     {mode === 'deep' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                  </div>
+                </button>
+
+                {/* DASS-21 Option */}
+                <button
+                  type="button"
+                  onClick={() => onSelectMode('dass21')}
+                  className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-start justify-between gap-4 group cursor-pointer ${
+                    mode === 'dass21'
+                      ? 'border-teal-600 dark:border-teal-400 bg-teal-50 dark:bg-teal-950/80 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                      : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-teal-400 dark:hover:border-teal-500'
+                  }`}
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div
+                      className={`p-2.5 rounded-xl shrink-0 ${
+                        mode === 'dass21'
+                          ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950'
+                          : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 group-hover:bg-teal-100 dark:group-hover:bg-teal-900/50'
+                      }`}
+                    >
+                      <Activity className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <span className="font-extrabold text-base text-slate-900 dark:text-white block">
+                        {t.dassTitle}
+                      </span>
+                      <span className="text-xs font-bold text-teal-700 dark:text-teal-400 block mt-0.5">
+                        {t.dassTime}
+                      </span>
+                      <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed font-medium">
+                        {t.dassDesc}
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${
+                      mode === 'dass21'
+                        ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950'
+                        : 'border-slate-300 dark:border-slate-600'
+                    }`}
+                  >
+                    {mode === 'dass21' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
                   </div>
                 </button>
               </div>

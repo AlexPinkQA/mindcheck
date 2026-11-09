@@ -45,6 +45,27 @@ const categoryLabels: Record<string, Record<Language, string>> = {
   },
 };
 
+const dassCategoryLabels: Record<string, Record<Language, string>> = {
+  stress: {
+    uk: 'DASS-21 • Шкала хронічного стресу',
+    en: 'DASS-21 • Chronic Stress Scale',
+    es: 'DASS-21 • Escala de estrés crónico',
+    pt: 'DASS-21 • Escala de stress crónico',
+  },
+  anxiety: {
+    uk: 'DASS-21 • Шкала тривожності',
+    en: 'DASS-21 • Anxiety Scale',
+    es: 'DASS-21 • Escala de ansiedad',
+    pt: 'DASS-21 • Escala de ansiedade',
+  },
+  depression: {
+    uk: 'DASS-21 • Шкала депресії',
+    en: 'DASS-21 • Depression Scale',
+    es: 'DASS-21 • Escala de depresión',
+    pt: 'DASS-21 • Escala de depressão',
+  },
+};
+
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   selectedValue,
@@ -55,7 +76,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 }) => {
   const [animatingValue, setAnimatingValue] = useState<number | null>(null);
   const t = translations[language];
-  const catLabel = categoryLabels[question.category]?.[language] || categoryLabels[question.category]?.['uk'] || 'Скринінг';
+  const isDass = question.id.startsWith('dass_');
+  const catMap = isDass ? dassCategoryLabels : categoryLabels;
+  const catLabel = catMap[question.category]?.[language] || catMap[question.category]?.['uk'] || 'MindCheck';
 
   const handleOptionClick = (val: number) => {
     setAnimatingValue(val);

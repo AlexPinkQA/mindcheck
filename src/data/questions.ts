@@ -1,9 +1,9 @@
-import { Question } from '../types/assessment';
+import { Question, AssessmentMode } from '../types/assessment';
 import { Language } from './translations';
 
 interface LocalizedQuestionData {
   id: string;
-  category: 'depression' | 'anxiety' | 'sleep' | 'context' | 'crisis';
+  category: 'depression' | 'anxiety' | 'stress' | 'sleep' | 'context' | 'crisis';
   isCrisisTrigger?: boolean;
   text: Record<Language, string>;
   subtext?: Record<Language, string>;
@@ -34,6 +34,33 @@ const standardFrequencyOptions: Record<Language, { value: number; label: string 
     { value: 1, label: 'Vários dias' },
     { value: 2, label: 'Mais de metade dos dias' },
     { value: 3, label: 'Quase todos os dias' },
+  ],
+};
+
+const dassFrequencyOptions: Record<Language, { value: number; label: string }[]> = {
+  uk: [
+    { value: 0, label: 'Зовсім не стосувалося мене' },
+    { value: 1, label: 'Стосувалося певною мірою / іноді' },
+    { value: 2, label: 'Стосувалося значною мірою / часто' },
+    { value: 3, label: 'Стосувалося дуже сильно / майже постійно' },
+  ],
+  en: [
+    { value: 0, label: 'Did not apply to me at all' },
+    { value: 1, label: 'Applied to me to some degree / sometimes' },
+    { value: 2, label: 'Applied to me considerably / a good part of time' },
+    { value: 3, label: 'Applied to me very much / most of the time' },
+  ],
+  es: [
+    { value: 0, label: 'No se aplicó a mí en absoluto' },
+    { value: 1, label: 'Se aplicó a mí en algún grado / a veces' },
+    { value: 2, label: 'Se aplicó a mí en grado considerable / con frecuencia' },
+    { value: 3, label: 'Se aplicó a mí mucho / la mayor parte del tiempo' },
+  ],
+  pt: [
+    { value: 0, label: 'Não se aplicou a mim de todo' },
+    { value: 1, label: 'Aplicou-se a mim em algum grau / às vezes' },
+    { value: 2, label: 'Aplicou-se a mim em grau considerável / frequentemente' },
+    { value: 3, label: 'Aplicou-se a mim muito / a maior parte do tempo' },
   ],
 };
 
@@ -446,7 +473,279 @@ const rawQuestions: LocalizedQuestionData[] = [
   },
 ];
 
-export function getQuestions(mode: 'express' | 'deep', lang: Language = 'uk'): Question[] {
+const dassSubtext: Record<Language, string> = {
+  uk: 'Протягом останнього тижня',
+  en: 'Over the past week',
+  es: 'Durante la última semana',
+  pt: 'Durante a última semana',
+};
+
+const rawDassQuestions: LocalizedQuestionData[] = [
+  // 1 (Stress)
+  {
+    id: 'dass_1',
+    category: 'stress',
+    text: {
+      uk: 'Мені було важко заспокоїтися / розслабитися після напруги',
+      en: 'I found it hard to wind down',
+      es: 'Me costó calmarme o relajarme',
+      pt: 'Achei difícil relaxar ou acalmar-me',
+    },
+    subtext: dassSubtext,
+  },
+  // 2 (Anxiety)
+  {
+    id: 'dass_2',
+    category: 'anxiety',
+    text: {
+      uk: 'Я відчував(-ла) сухість у роті',
+      en: 'I was aware of dryness of my mouth',
+      es: 'Noté que tenía la boca seca',
+      pt: 'Notei que tinha a boca seca',
+    },
+    subtext: dassSubtext,
+  },
+  // 3 (Depression)
+  {
+    id: 'dass_3',
+    category: 'depression',
+    text: {
+      uk: 'Я зовсім не міг(-ла) відчути позитивних емоцій чи радості',
+      en: "I couldn't seem to experience any positive feeling at all",
+      es: 'Parecía que no podía experimentar ningún sentimiento positivo',
+      pt: 'Parecia que não conseguia ter qualquer sentimento positivo',
+    },
+    subtext: dassSubtext,
+  },
+  // 4 (Anxiety)
+  {
+    id: 'dass_4',
+    category: 'anxiety',
+    text: {
+      uk: 'Я відчував(-ла) утруднене дихання (задишку без фізичного навантаження)',
+      en: 'I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness without physical exertion)',
+      es: 'Experimenté dificultades para respirar (respiración rápida o falta de aire sin esfuerzo físico)',
+      pt: 'Senti dificuldades em respirar (respiração ofegante ou falta de ar sem esforço físico)',
+    },
+    subtext: dassSubtext,
+  },
+  // 5 (Depression)
+  {
+    id: 'dass_5',
+    category: 'depression',
+    text: {
+      uk: 'Мені було важко знайти в собі ініціативу або сили, щоб почати щось робити',
+      en: 'I found it difficult to work up the initiative to do things',
+      es: 'Me resultó difícil tomar la iniciativa para hacer cosas',
+      pt: 'Achei difícil tomar a iniciativa para fazer coisas',
+    },
+    subtext: dassSubtext,
+  },
+  // 6 (Stress)
+  {
+    id: 'dass_6',
+    category: 'stress',
+    text: {
+      uk: 'Я був(-ла) схильний(-а) занадто гостро або емоційно реагувати на ситуації',
+      en: 'I tended to over-react to situations',
+      es: 'Tendí a reaccionar exageradamente ante las situaciones',
+      pt: 'Tive tendência a reagir exageradamente às situações',
+    },
+    subtext: dassSubtext,
+  },
+  // 7 (Anxiety)
+  {
+    id: 'dass_7',
+    category: 'anxiety',
+    text: {
+      uk: 'Я відчував(-ла) тремтіння (наприклад, у руках)',
+      en: 'I experienced trembling (e.g. in the hands)',
+      es: 'Sentí temblores (por ejemplo, en las manos)',
+      pt: 'Senti tremores (por exemplo, nas mãos)',
+    },
+    subtext: dassSubtext,
+  },
+  // 8 (Stress)
+  {
+    id: 'dass_8',
+    category: 'stress',
+    text: {
+      uk: 'Я відчував(-ла), що витрачаю занадто багато нервової енергії',
+      en: 'I felt that I was using a lot of nervous energy',
+      es: 'Sentí que consumía mucha energía nerviosa',
+      pt: 'Senti que estava a gastar muita energia nervosa',
+    },
+    subtext: dassSubtext,
+  },
+  // 9 (Anxiety)
+  {
+    id: 'dass_9',
+    category: 'anxiety',
+    text: {
+      uk: 'Я хвилювався(-лася) через ситуації, де міг(-ла) запанікувати і втратити контроль',
+      en: 'I was worried about situations in which I might panic and make a fool of myself',
+      es: 'Me preocupaban situaciones en las que pudiera entrar en pánico o hacer el ridículo',
+      pt: 'Preocupavam-me situações em que pudesse entrar em pânico e fazer má figura',
+    },
+    subtext: dassSubtext,
+  },
+  // 10 (Depression)
+  {
+    id: 'dass_10',
+    category: 'depression',
+    text: {
+      uk: 'Я відчував(-ла), що мені немає на що з оптимізмом чекати попереду',
+      en: 'I felt that I had nothing to look forward to',
+      es: 'Sentí que no tenía nada ilusionante por delante',
+      pt: 'Senti que não tinha nada pelo qual ansiar no futuro',
+    },
+    subtext: dassSubtext,
+  },
+  // 11 (Stress)
+  {
+    id: 'dass_11',
+    category: 'stress',
+    text: {
+      uk: 'Я помічав(-ла), що стаю збудженим(-ою), неспокійним(-ою) або роздратованим(-ою)',
+      en: 'I found myself getting agitated',
+      es: 'Me sentí agitado o inquieto',
+      pt: 'Dei comigo a ficar agitado ou inquieto',
+    },
+    subtext: dassSubtext,
+  },
+  // 12 (Stress)
+  {
+    id: 'dass_12',
+    category: 'stress',
+    text: {
+      uk: 'Мені було важко по-справжньому розслабитися',
+      en: 'I found it difficult to relax',
+      es: 'Me resultó difícil relajarme',
+      pt: 'Achei difícil relaxar',
+    },
+    subtext: dassSubtext,
+  },
+  // 13 (Depression)
+  {
+    id: 'dass_13',
+    category: 'depression',
+    text: {
+      uk: 'Я почувався(-лася) пригніченим(-ою), сумним(-ою) та зневіреним(-ою)',
+      en: 'I felt down-hearted and blue',
+      es: 'Me sentí triste y desanimado',
+      pt: 'Senti-me em baixo e triste',
+    },
+    subtext: dassSubtext,
+  },
+  // 14 (Stress)
+  {
+    id: 'dass_14',
+    category: 'stress',
+    text: {
+      uk: 'Я нетерпляче реагував(-ла) на будь-які затримки або коли мене відволікали від справ',
+      en: 'I was intolerant of anything that kept me from getting on with what I was doing',
+      es: 'No toleraba nada que me impidiera seguir con lo que estaba haciendo',
+      pt: 'Fiquei intolerante com tudo o que me impedia de continuar o que estava a fazer',
+    },
+    subtext: dassSubtext,
+  },
+  // 15 (Anxiety)
+  {
+    id: 'dass_15',
+    category: 'anxiety',
+    text: {
+      uk: 'Я відчував(-ла), що стан близький до паніки',
+      en: 'I felt I was close to panic',
+      es: 'Sentí que estaba cerca del pánico',
+      pt: 'Senti que estava à beira do pânico',
+    },
+    subtext: dassSubtext,
+  },
+  // 16 (Depression)
+  {
+    id: 'dass_16',
+    category: 'depression',
+    text: {
+      uk: 'Я не міг(-ла) відчути ентузіазму ні щодо чого',
+      en: 'I was unable to become enthusiastic about anything',
+      es: 'Fui incapaz de entusiasmarme con nada',
+      pt: 'Fui incapaz de me entusiasmar com o que quer que fosse',
+    },
+    subtext: dassSubtext,
+  },
+  // 17 (Depression)
+  {
+    id: 'dass_17',
+    category: 'depression',
+    text: {
+      uk: 'Я відчував(-ла), що мало чого вартий(-а) як особистість',
+      en: "I felt I wasn't worth much as a person",
+      es: 'Sentí que no valía mucho como persona',
+      pt: 'Senti que não valia muito como pessoa',
+    },
+    subtext: dassSubtext,
+  },
+  // 18 (Stress)
+  {
+    id: 'dass_18',
+    category: 'stress',
+    text: {
+      uk: 'Я відчував(-ла) себе досить вразливим(-ою) або легко дратувався(-лася)',
+      en: 'I felt that I was rather touchy',
+      es: 'Sentí que estaba bastante susceptible o irritable',
+      pt: 'Senti que estava bastante suscetível ou irritável',
+    },
+    subtext: dassSubtext,
+  },
+  // 19 (Anxiety)
+  {
+    id: 'dass_19',
+    category: 'anxiety',
+    text: {
+      uk: 'Я виразно відчував(-ла) своє серцебиття без фізичних навантажень (тахікардія)',
+      en: 'I was aware of the action of my heart in the absence of physical exertion',
+      es: 'Sentí los latidos de mi corazón sin haber hecho esfuerzo físico',
+      pt: 'Senti os batimentos do meu coração na ausência de esforço físico',
+    },
+    subtext: dassSubtext,
+  },
+  // 20 (Anxiety)
+  {
+    id: 'dass_20',
+    category: 'anxiety',
+    text: {
+      uk: 'Я відчував(-ла) безпричинний страх чи тривожність',
+      en: 'I felt scared without any good reason',
+      es: 'Sentí miedo sin ninguna razón válida',
+      pt: 'Senti medo sem qualquer motivo aparente',
+    },
+    subtext: dassSubtext,
+  },
+  // 21 (Depression)
+  {
+    id: 'dass_21',
+    category: 'depression',
+    text: {
+      uk: 'Я відчував(-ла), що життя втратило будь-який сенс',
+      en: 'I felt that life was meaningless',
+      es: 'Sentí que la vida carecía de sentido',
+      pt: 'Senti que a vida não tinha sentido',
+    },
+    subtext: dassSubtext,
+  },
+];
+
+export function getQuestions(mode: AssessmentMode, lang: Language = 'uk'): Question[] {
+  if (mode === 'dass21') {
+    return rawDassQuestions.map(q => ({
+      id: q.id,
+      category: q.category,
+      text: q.text[lang] || q.text['en'],
+      subtext: q.subtext ? (q.subtext[lang] || q.subtext['en']) : undefined,
+      options: dassFrequencyOptions[lang] || dassFrequencyOptions['en'],
+    }));
+  }
+
   const selected = mode === 'express'
     ? rawQuestions.filter(q => q.id.startsWith('phq_'))
     : rawQuestions;

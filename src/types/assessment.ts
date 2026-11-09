@@ -2,7 +2,7 @@ import { Language } from '../data/translations';
 
 export type SeverityLevel = 'minimal' | 'mild' | 'moderate' | 'moderately_severe' | 'severe';
 
-export type AssessmentMode = 'express' | 'deep';
+export type AssessmentMode = 'express' | 'deep' | 'dass21';
 
 export interface QuestionOption {
   value: number;
@@ -11,7 +11,7 @@ export interface QuestionOption {
 
 export interface Question {
   id: string;
-  category: 'depression' | 'anxiety' | 'sleep' | 'context' | 'crisis';
+  category: 'depression' | 'anxiety' | 'stress' | 'sleep' | 'context' | 'crisis';
   text: string;
   subtext?: string;
   options: QuestionOption[];
@@ -32,6 +32,8 @@ export interface AssessmentResult {
   depressionLevel: SeverityLevel;
   anxietyScore?: number;
   anxietyLevel?: SeverityLevel;
+  stressScore?: number;
+  stressLevel?: SeverityLevel;
   crisisFlag: boolean;
   completionDate: string;
   answers: Record<string, number>;
