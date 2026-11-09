@@ -1,17 +1,34 @@
 import React from 'react';
 import { HeartHandshake, Phone, MessageCircle, X } from 'lucide-react';
 import { crisisContacts } from '../data/crisisContacts';
+import { Language, translations } from '../data/translations';
 
 interface CrisisModalProps {
   isOpen: boolean;
   onClose: () => void;
-  countryCode?: string;
+  language: Language;
+  isUnder18?: boolean;
 }
 
-export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, countryCode = 'UA' }) => {
+export const CrisisModal: React.FC<CrisisModalProps> = ({
+  isOpen,
+  onClose,
+  language,
+  isUnder18 = false,
+}) => {
   if (!isOpen) return null;
 
-  const contacts = crisisContacts[countryCode] || crisisContacts['UA'];
+  const t = translations[language];
+  const contactsList = crisisContacts['UA']; // Default country contacts
+
+  // If under 18, sort youth-specific contacts to the top
+  const sortedContacts = [...contactsList].sort((a, b) => {
+    if (isUnder18) {
+      if (a.isYouthSpecific && !b.isYouthSpecific) return -1;
+      if (!a.isYouthSpecific && b.isYouthSpecific) return 1;
+    }
+    return 0;
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
@@ -23,8 +40,8 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
               <HeartHandshake className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">Твоє життя має значення</h2>
-              <p className="text-xs text-rose-100">Ти не мусиш проходити крізь це наодинці</p>
+              <h2 className="text-lg font-bold">{t.crisisModalTitle}</h2>
+              <p className="text-xs text-rose-100">{t.crisisModalSubtitle}</p>
             </div>
           </div>
           <button
@@ -39,16 +56,16 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
         {/* Content */}
         <div className="p-6 space-y-4">
           <p className="text-sm text-slate-700 leading-relaxed">
-            Якщо ти відчуваєш нестерпний душевний біль або думаєш про заподіяння собі шкоди — будь ласка, звернися до людей, які вміють підтримати. Це <strong>цілком безкоштовно та анонімно</strong>.
+            {t.crisisModalDesc}
           </p>
 
-          <div className="space-y-3 pt-1">
-            {contacts.map((c, idx) => (
+          <div className="space-y-3 pt-1 max-h-[55vh] overflow-y-auto pr-1">
+            {sortedContacts.map((c, idx) => (
               <div
                 key={idx}
                 className={`p-3.5 rounded-xl border transition ${
                   c.isYouthSpecific
-                    ? 'bg-teal-50/70 border-teal-200'
+                    ? 'bg-teal-50/80 border-teal-300 ring-1 ring-teal-200'
                     : 'bg-slate-50 border-slate-200'
                 }`}
               >
@@ -59,7 +76,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
                   </div>
                   {c.isYouthSpecific && (
                     <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 bg-teal-600 text-white rounded-full whitespace-nowrap">
-                      Для молоді
+                      {t.crisisYouthTag}
                     </span>
                   )}
                 </div>
@@ -71,7 +88,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 text-white text-xs font-medium hover:bg-rose-700 transition"
                     >
                       <Phone className="w-3.5 h-3.5" />
-                      Зателефонувати ({c.phone})
+                      {t.crisisCall(c.phone)}
                     </a>
                   )}
                   {c.chatUrl && (
@@ -82,7 +99,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-700 text-white text-xs font-medium hover:bg-teal-800 transition"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
-                      Написати в чат підтримки
+                      {t.crisisChat}
                     </a>
                   )}
                 </div>
@@ -95,7 +112,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({ isOpen, onClose, count
               onClick={onClose}
               className="text-xs text-slate-500 hover:text-slate-800 underline underline-offset-4"
             >
-              Я розумію, продовжити проходження тесту
+              {t.crisisDismiss}
             </button>
           </div>
         </div>

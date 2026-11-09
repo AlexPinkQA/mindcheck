@@ -1,28 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Question } from '../types/assessment';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { Language, translations } from '../data/translations';
 
 interface QuestionCardProps {
   question: Question;
   selectedValue?: number;
-  onSelect: (value: number) => void;
-  onNext: () => void;
+  onSelectAndNext: (value: number) => void;
   onPrev: () => void;
   canPrev: boolean;
-  isLast: boolean;
+  language: Language;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   selectedValue,
-  onSelect,
-  onNext,
+  onSelectAndNext,
   onPrev,
   canPrev,
-  isLast,
+  language,
 }) => {
+  const [animatingValue, setAnimatingValue] = useState<number | null>(null);
+  const t = translations[language];
+
+  const handleOptionClick = (val: number) => {
+    setAnimatingValue(val);
+    // Smooth brief delay for tactile feedback before advancing
+    setTimeout(() => {
+      onSelectAndNext(val);
+      setAnimatingValue(null);
+    }, 220);
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 transition-all">
+    <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 sm:p-8 transition-all animate-fade-in">
       <div className="mb-6">
         <h2 className="text-xl sm:text-2xl font-semibold text-slate-900 leading-snug">
           {question.text}
@@ -32,17 +43,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         )}
       </div>
 
-      <div className="space-y-3 mb-8">
+      <div className="space-y-3 mb-6">
         {question.options.map((opt) => {
-          const isSelected = selectedValue === opt.value;
+          const isSelected = (animatingValue !== null ? animatingValue === opt.value : selectedValue === opt.value);
           return (
             <button
               key={opt.value}
               type="button"
-              onClick={() => onSelect(opt.value)}
-              className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all flex items-center justify-between group ${
+              onClick={() => handleOptionClick(opt.value)}
+              className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-all flex items-center justify-between group active:scale-[0.99] ${
                 isSelected
-                  ? 'border-teal-600 bg-teal-50/60 shadow-sm text-teal-950 font-medium'
+                  ? 'border-teal-600 bg-teal-50/80 shadow-sm text-teal-950 font-semibold'
                   : 'border-slate-200 hover:border-teal-300 hover:bg-slate-50/70 text-slate-800'
               }`}
             >
@@ -64,29 +75,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           type="button"
           onClick={onPrev}
           disabled={!canPrev}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
             canPrev
               ? 'text-slate-700 hover:bg-slate-100'
               : 'text-slate-300 cursor-not-allowed'
           }`}
         >
           <ArrowLeft className="w-4 h-4" />
-          Назад
+          {t.backBtn}
         </button>
 
-        <button
-          type="button"
-          onClick={onNext}
-          disabled={selectedValue === undefined}
-          className={`inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm ${
-            selectedValue !== undefined
-              ? 'bg-teal-700 text-white hover:bg-teal-800'
-              : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-          }`}
-        >
-          <span>{isLast ? 'Отримати результат' : 'Далі'}</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+        <span className="text-[11px] text-slate-400 italic">
+          Натисніть варіант для переходу далі
+        </span>
       </div>
     </div>
   );

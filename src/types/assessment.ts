@@ -1,6 +1,8 @@
+import { Language } from '../data/translations';
+
 export type SeverityLevel = 'minimal' | 'mild' | 'moderate' | 'moderately_severe' | 'severe';
 
-export type AssessmentStage = 'welcome' | 'stage1_screening' | 'stage1_result' | 'stage2_deep' | 'final_result';
+export type AssessmentMode = 'express' | 'deep';
 
 export interface QuestionOption {
   value: number;
@@ -13,7 +15,7 @@ export interface Question {
   text: string;
   subtext?: string;
   options: QuestionOption[];
-  isCrisisTrigger?: boolean; // triggers immediate crisis help if answered with high risk
+  isCrisisTrigger?: boolean;
 }
 
 export interface CrisisContact {
@@ -35,4 +37,8 @@ export interface AssessmentResult {
   answers: Record<string, number>;
   insights: string[];
   recommendations: string[];
+  birthYear?: number;
+  isUnder18?: boolean;
+  mode: AssessmentMode;
+  language: Language;
 }
