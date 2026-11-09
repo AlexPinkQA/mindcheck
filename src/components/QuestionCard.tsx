@@ -150,7 +150,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </button>
 
         <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
-          Оберіть варіант для автопереходу
+          {t.autoAdvanceHint}
         </span>
       </div>
     </div>

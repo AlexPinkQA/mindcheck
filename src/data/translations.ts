@@ -63,6 +63,30 @@ export interface TranslationStrings {
   stepAge: string;
   stepMode: string;
   onboardingStepOf: (current: number, total: number) => string;
+  testParameters: string;
+  changeAll: string;
+  languageLabel: string;
+  yearsOldShort: string;
+  yearsOldFull: string;
+  autoAdvanceHint: string;
+  gaugeMin: string;
+  gaugeMod: string;
+  gaugeSev: string;
+  gaugeHigh: string;
+  doctorReportSubtext: string;
+  youthChatNote: string;
+  adultChatNote: string;
+  birthYearRequiredWarning: string;
+  closeBtn: string;
+  setupTitle: string;
+  birthYearLabel: string;
+  expressBadge: string;
+  deepBadge: string;
+  continueAssessmentTag: string;
+  themeLight: string;
+  themeDark: string;
+  startOverTooltip: string;
+  setupTooltip: string;
 }
 
 export const translations: Record<Language, TranslationStrings> = {
@@ -129,6 +153,30 @@ export const translations: Record<Language, TranslationStrings> = {
     stepAge: '2. Вік',
     stepMode: '3. Формат',
     onboardingStepOf: (c, t) => `Крок ${c} з ${t}`,
+    testParameters: 'Параметри оцінювання',
+    changeAll: 'Змінити всі',
+    languageLabel: 'Мова',
+    yearsOldShort: 'р.',
+    yearsOldFull: 'років',
+    autoAdvanceHint: 'Оберіть варіант для автопереходу',
+    gaugeMin: 'Мінімум',
+    gaugeMod: 'Помірний',
+    gaugeSev: 'Тяжкий',
+    gaugeHigh: 'Виражений',
+    doctorReportSubtext: 'Скопіюйте стисле резюме симптомів для комфортного обговорення на прийомі',
+    youthChatNote: 'Вам будуть доступні делікатні підліткові чати та лінії підтримки.',
+    adultChatNote: 'Рекомендації та шкали адаптовані для дорослої аудиторії.',
+    birthYearRequiredWarning: '⚠️ Будь ласка, оберіть ваш рік народження, щоб продовжити.',
+    closeBtn: 'Закрити',
+    setupTitle: 'Налаштування',
+    birthYearLabel: 'Рік народження',
+    expressBadge: '⚡ 9 питань (5 хв)',
+    deepBadge: '🔬 20 питань (10 хв)',
+    continueAssessmentTag: 'Продовження тестування',
+    themeLight: 'Світлий режим',
+    themeDark: 'Нічний режим',
+    startOverTooltip: 'Повернутися на початок',
+    setupTooltip: 'Налаштування тестування',
   },
   en: {
     title: 'MindCheck',
@@ -193,6 +241,30 @@ export const translations: Record<Language, TranslationStrings> = {
     stepAge: '2. Age',
     stepMode: '3. Format',
     onboardingStepOf: (c, t) => `Step ${c} of ${t}`,
+    testParameters: 'Assessment Parameters',
+    changeAll: 'Change all',
+    languageLabel: 'Language',
+    yearsOldShort: 'y.o.',
+    yearsOldFull: 'years old',
+    autoAdvanceHint: 'Select an option to auto-advance',
+    gaugeMin: 'Minimal',
+    gaugeMod: 'Moderate',
+    gaugeSev: 'Severe',
+    gaugeHigh: 'Mod. Severe',
+    doctorReportSubtext: 'Copy a concise summary of your symptoms to discuss comfortably with your doctor',
+    youthChatNote: 'Youth-friendly support chats and hotlines will be available.',
+    adultChatNote: 'Recommendations and scales are adapted for an adult audience.',
+    birthYearRequiredWarning: '⚠️ Please select your year of birth to continue.',
+    closeBtn: 'Close',
+    setupTitle: 'Settings',
+    birthYearLabel: 'Birth year',
+    expressBadge: '⚡ 9 questions (5 min)',
+    deepBadge: '🔬 20 questions (10 min)',
+    continueAssessmentTag: 'Extend Assessment',
+    themeLight: 'Light mode',
+    themeDark: 'Dark mode',
+    startOverTooltip: 'Start over',
+    setupTooltip: 'Assessment settings',
   },
   es: {
     title: 'MindCheck',
@@ -257,6 +329,30 @@ export const translations: Record<Language, TranslationStrings> = {
     stepAge: '2. Edad',
     stepMode: '3. Formato',
     onboardingStepOf: (c, t) => `Paso ${c} de ${t}`,
+    testParameters: 'Parámetros de evaluación',
+    changeAll: 'Cambiar todo',
+    languageLabel: 'Idioma',
+    yearsOldShort: 'años',
+    yearsOldFull: 'años',
+    autoAdvanceHint: 'Seleccione una opción para avanzar automáticamente',
+    gaugeMin: 'Mínimo',
+    gaugeMod: 'Moderado',
+    gaugeSev: 'Grave',
+    gaugeHigh: 'Marcado',
+    doctorReportSubtext: 'Copie un resumen conciso de los síntomas para comentarlo con su médico',
+    youthChatNote: 'Tendrá disponibles chats y líneas de ayuda adaptados para jóvenes.',
+    adultChatNote: 'Recomendaciones y escalas adaptadas para público adulto.',
+    birthYearRequiredWarning: '⚠️ Por favor, seleccione su año de nacimiento para continuar.',
+    closeBtn: 'Cerrar',
+    setupTitle: 'Configuración',
+    birthYearLabel: 'Año de nacimiento',
+    expressBadge: '⚡ 9 preguntas (5 min)',
+    deepBadge: '🔬 20 preguntas (10 min)',
+    continueAssessmentTag: 'Continuar evaluación',
+    themeLight: 'Modo claro',
+    themeDark: 'Modo oscuro',
+    startOverTooltip: 'Volver al inicio',
+    setupTooltip: 'Configuración de la prueba',
   },
   pt: {
     title: 'MindCheck',
@@ -321,5 +417,29 @@ export const translations: Record<Language, TranslationStrings> = {
     stepAge: '2. Idade',
     stepMode: '3. Formato',
     onboardingStepOf: (c, t) => `Passo ${c} de ${t}`,
+    testParameters: 'Parâmetros de avaliação',
+    changeAll: 'Alterar tudo',
+    languageLabel: 'Idioma',
+    yearsOldShort: 'anos',
+    yearsOldFull: 'anos',
+    autoAdvanceHint: 'Selecione uma opção para avançar automaticamente',
+    gaugeMin: 'Mínimo',
+    gaugeMod: 'Moderado',
+    gaugeSev: 'Grave',
+    gaugeHigh: 'Marcado',
+    doctorReportSubtext: 'Copie um resumo conciso dos sintomas para partilhar com o seu médico',
+    youthChatNote: 'Estarão disponíveis chats e linhas de apoio adaptados para jovens.',
+    adultChatNote: 'Recomendações e escalas adaptadas para público adulto.',
+    birthYearRequiredWarning: '⚠️ Por favor, selecione o seu ano de nascimento para continuar.',
+    closeBtn: 'Fechar',
+    setupTitle: 'Configurações',
+    birthYearLabel: 'Ano de nascimento',
+    expressBadge: '⚡ 9 perguntas (5 min)',
+    deepBadge: '🔬 20 perguntas (10 min)',
+    continueAssessmentTag: 'Continuar avaliação',
+    themeLight: 'Modo claro',
+    themeDark: 'Modo escuro',
+    startOverTooltip: 'Voltar ao início',
+    setupTooltip: 'Definições da avaliação',
   }
 };

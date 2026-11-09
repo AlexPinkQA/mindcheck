@@ -225,7 +225,7 @@ export default function App() {
               <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                    Параметри оцінювання
+                    {t.testParameters}
                   </span>
                   <button
                     type="button"
@@ -233,7 +233,7 @@ export default function App() {
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition cursor-pointer"
                   >
                     <Sliders className="w-3.5 h-3.5" />
-                    <span>Змінити всі</span>
+                    <span>{t.changeAll}</span>
                   </button>
                 </div>
 
@@ -244,7 +244,7 @@ export default function App() {
                     onClick={() => handleOpenSetup('language')}
                     className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-left hover:border-teal-400 dark:hover:border-teal-500 transition group cursor-pointer shadow-2xs"
                   >
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">Мова</span>
+                    <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.languageLabel}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                       {language === 'uk' && '🇺🇦 Українська'}
                       {language === 'en' && '🇬🇧 English'}
@@ -261,7 +261,7 @@ export default function App() {
                   >
                     <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedAge}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors truncate block">
-                      {birthYear ? `${2026 - birthYear} р. (${birthYear})` : t.notSpecified}
+                      {birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}
                     </span>
                   </button>
 
@@ -273,7 +273,7 @@ export default function App() {
                   >
                     <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedFormat}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                      {mode === 'express' ? '⚡ 9 питань (5 хв)' : '🔬 20 питань (10 хв)'}
+                      {mode === 'express' ? t.expressBadge : t.deepBadge}
                     </span>
                   </button>
                 </div>
@@ -333,6 +333,7 @@ export default function App() {
               currentStep={currentStep}
               totalSteps={questions.length}
               stageTitle={mode === 'express' ? `${t.expressTitle} (${questions.length})` : `${t.deepTitle} (${questions.length})`}
+              language={language}
             />
 
             <QuestionCard

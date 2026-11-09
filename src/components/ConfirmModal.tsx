@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertCircle, X } from 'lucide-react';
-import { Language } from '../data/translations';
+import { Language, translations } from '../data/translations';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-          aria-label="Закрити"
+          aria-label={translations[language]?.closeBtn || 'Close'}
         >
           <X className="w-5 h-5" />
         </button>

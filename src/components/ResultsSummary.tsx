@@ -122,6 +122,14 @@ const severityConfig: Record<Language, Record<SeverityLevel, { label: string; co
   },
 };
 
+const severityBarGradient: Record<SeverityLevel, string> = {
+  minimal: 'bg-emerald-500',
+  mild: 'bg-gradient-to-r from-emerald-500 to-teal-500',
+  moderate: 'bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500',
+  moderately_severe: 'bg-gradient-to-r from-emerald-500 via-amber-500 to-orange-500',
+  severe: 'bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-600',
+};
+
 export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   result,
   onRetake,
@@ -139,8 +147,8 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const handleCopyReport = () => {
     const reportText = `=== MindCheck: ${t.resultTitle} ===
 ${t.title}: ${result.completionDate}
-${result.birthYear ? `Рік народження / Birth year: ${result.birthYear}` : ''}
-Формат / Mode: ${result.mode === 'express' ? 'Express (PHQ-9)' : 'Deep Research'}
+${result.birthYear ? `${t.birthYearLabel}: ${result.birthYear}` : ''}
+${t.selectedFormat}: ${result.mode === 'express' ? 'Express (PHQ-9)' : 'Deep Research (PHQ-9 + GAD-7)'}
 
 1. ${t.depTitle}: ${result.depressionScore}/27 (${depSeverity.label})
 ${result.anxietyScore !== undefined && anxSeverity ? `2. ${t.anxTitle}: ${result.anxietyScore}/21 (${anxSeverity.label})` : ''}
@@ -181,7 +189,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-300 bg-teal-100/80 dark:bg-teal-900/60 px-2.5 py-0.5 rounded-full">
-                  Продовження тестування
+                  {t.continueAssessmentTag}
                 </span>
               </div>
 
@@ -218,7 +226,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
 
       {/* Main Score Cards */}
       <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-3xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <span className="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500">
               {t.resultTitle}
@@ -227,18 +235,21 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
               {t.resultProfile}
             </h2>
           </div>
-          <span className="text-xs font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/70 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs">
-            {result.mode === 'express' ? '⚡ Express (PHQ-9)' : '🔬 Deep Research (PHQ-9 + GAD-7)'}
-          </span>
+          <div className="self-start sm:self-center shrink-0">
+            <span className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-teal-800 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/70 px-3.5 py-1.5 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs leading-none">
+              <span className="text-sm leading-none">{result.mode === 'express' ? '⚡' : '🔬'}</span>
+              <span>{result.mode === 'express' ? 'Express (PHQ-9)' : 'Deep Research (PHQ-9 + GAD-7)'}</span>
+            </span>
+          </div>
         </div>
 
         {/* Depression Score Block */}
         <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">{t.depTitle}</span>
-                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${depSeverity.color}`}>
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg leading-snug">{t.depTitle}</span>
+                <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold leading-none border shrink-0 ${depSeverity.color}`}>
                   {depSeverity.label}
                 </span>
               </div>
@@ -255,14 +266,14 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
           {/* Clinical Visual Gauge Bar */}
           <div className="space-y-1.5 pt-2">
             <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-              <span>0 (Мінімум)</span>
-              <span>10 (Помірний)</span>
-              <span>20 (Тяжкий)</span>
+              <span>0 ({t.gaugeMin})</span>
+              <span>10 ({t.gaugeMod})</span>
+              <span>20 ({t.gaugeSev})</span>
               <span>27</span>
             </div>
             <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 transition-all duration-700 ease-out"
+                className={`h-full rounded-full transition-all duration-700 ease-out shadow-xs ${severityBarGradient[result.depressionLevel]}`}
                 style={{ width: `${depPercent}%` }}
               />
             </div>
@@ -273,10 +284,10 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         {result.anxietyScore !== undefined && anxSeverity && (
           <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg">{t.anxTitle}</span>
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${anxSeverity.color}`}>
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="font-extrabold text-slate-900 dark:text-white text-base sm:text-lg leading-snug">{t.anxTitle}</span>
+                  <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold leading-none border shrink-0 ${anxSeverity.color}`}>
                     {anxSeverity.label}
                   </span>
                 </div>
@@ -293,14 +304,14 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
             {/* Anxiety Visual Gauge */}
             <div className="space-y-1.5 pt-2">
               <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-                <span>0 (Мінімум)</span>
-                <span>10 (Помірний)</span>
-                <span>15 (Виражений)</span>
+                <span>0 ({t.gaugeMin})</span>
+                <span>10 ({t.gaugeMod})</span>
+                <span>15 ({t.gaugeHigh})</span>
                 <span>21</span>
               </div>
               <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-teal-500 via-yellow-500 to-rose-500 transition-all duration-700 ease-out"
+                  className={`h-full rounded-full transition-all duration-700 ease-out shadow-xs ${severityBarGradient[result.anxietyLevel!]}`}
                   style={{ width: `${anxPercent}%` }}
                 />
               </div>
@@ -364,7 +375,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-sm font-bold text-slate-900 dark:text-white block">{t.copyDoctorReport}</span>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Скопіюйте стисле резюме симптомів для комфортного обговорення на прийомі</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{t.doctorReportSubtext}</p>
           </div>
           <button
             type="button"

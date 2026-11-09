@@ -36,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
           type="button"
           onClick={onLogoClick}
           className="flex items-center gap-3 text-left group transition cursor-pointer select-none"
-          title="Повернутися на початок / Start over"
+          title={t.startOverTooltip}
         >
           <div className="relative">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-teal-600/20 group-hover:scale-105 group-hover:shadow-teal-600/30 transition-all duration-300">
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={onOpenSetup}
             className="flex items-center gap-1.5 text-xs text-slate-700 dark:text-slate-200 bg-slate-100/90 dark:bg-slate-900/90 hover:bg-slate-200/80 dark:hover:bg-slate-800 px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-800 font-semibold transition active:scale-95 shadow-2xs"
-            title="Налаштування тестування / Test settings"
+            title={t.setupTooltip}
           >
             <Globe className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
             <span>{langLabels[language]}</span>
@@ -76,8 +76,8 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={onToggleDarkMode}
             className="p-2 text-slate-700 dark:text-amber-400 bg-slate-100/90 dark:bg-slate-900/90 hover:bg-slate-200/80 dark:hover:bg-slate-800 rounded-xl border border-slate-200/80 dark:border-slate-800 transition active:scale-95 shadow-2xs"
-            aria-label={darkMode ? 'Увімкнути світлу тему' : 'Увімкнути темну тему'}
-            title={darkMode ? 'Світлий режим' : 'Нічний режим'}
+            aria-label={darkMode ? t.themeLight : t.themeDark}
+            title={darkMode ? t.themeLight : t.themeDark}
           >
             {darkMode ? (
               <Sun className="w-4 h-4 transition-transform hover:rotate-45" />

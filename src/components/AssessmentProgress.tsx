@@ -1,17 +1,21 @@
 import React from 'react';
+import { Language, translations } from '../data/translations';
 
 interface AssessmentProgressProps {
   currentStep: number;
   totalSteps: number;
   stageTitle: string;
+  language: Language;
 }
 
 export const AssessmentProgress: React.FC<AssessmentProgressProps> = ({
   currentStep,
   totalSteps,
   stageTitle,
+  language,
 }) => {
   const percent = Math.min(100, Math.round(((currentStep + 1) / totalSteps) * 100));
+  const t = translations[language];
 
   return (
     <div className="w-full mb-8">
@@ -20,7 +24,7 @@ export const AssessmentProgress: React.FC<AssessmentProgressProps> = ({
           {stageTitle}
         </span>
         <span className="font-semibold text-slate-600 dark:text-slate-300">
-          Питання {currentStep + 1} з {totalSteps} ({percent}%)
+          {t.questionOf(currentStep + 1, totalSteps)} ({percent}%)
         </span>
       </div>
       <div className="w-full h-2.5 bg-slate-200/80 dark:bg-slate-800 rounded-full overflow-hidden border border-slate-200/60 dark:border-slate-700/60">

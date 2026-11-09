@@ -75,7 +75,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
           <div className="space-y-0.5">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-wider text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/70 px-2.5 py-0.5 rounded-full border border-teal-200 dark:border-teal-800">
-                {isOnboarding ? t.onboardingStepOf(stepNumber, 3) : 'Налаштування / Setup'}
+                {isOnboarding ? t.onboardingStepOf(stepNumber, 3) : t.setupTitle}
               </span>
               <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
                 MindCheck
@@ -92,7 +92,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
             <button
               onClick={onClose}
               className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-              aria-label="Закрити"
+              aria-label={t.closeBtn}
             >
               <X className="w-5 h-5" />
             </button>
@@ -222,7 +222,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     htmlFor="modal-birth-year"
                     className="block text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wide mb-2"
                   >
-                    Рік народження / Birth year
+                    {t.birthYearLabel}
                   </label>
                   <select
                     id="modal-birth-year"
@@ -235,7 +235,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     </option>
                     {years.map((y) => (
                       <option key={y} value={y} className="text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-800">
-                        {y} ({currentYear - y} {language === 'uk' ? 'р.' : 'y.o.'})
+                        {y} ({currentYear - y} {t.yearsOldShort})
                       </option>
                     ))}
                   </select>
@@ -246,18 +246,16 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0" />
                     <div>
                       <span className="font-extrabold text-sm block">
-                        {isUnder18 ? t.youthBadge : `${currentYear - birthYear} років / years old`}
+                        {isUnder18 ? t.youthBadge : `${currentYear - birthYear} ${t.yearsOldFull}`}
                       </span>
                       <span className="text-xs text-teal-800 dark:text-teal-300">
-                        {isUnder18
-                          ? 'Вам будуть доступні делікатні підліткові чати та лінії підтримки.'
-                          : 'Рекомендації та шкали адаптовані для дорослої аудиторії.'}
+                        {isUnder18 ? t.youthChatNote : t.adultChatNote}
                       </span>
                     </div>
                   </div>
                 ) : (
                   <p className="text-xs text-amber-700 dark:text-amber-400 font-medium">
-                    ⚠️ Будь ласка, оберіть ваш рік народження, щоб продовжити.
+                    {t.birthYearRequiredWarning}
                   </p>
                 )}
               </div>
@@ -372,7 +370,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   onClick={onClose}
                   className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition"
                 >
-                  Закрити / Close
+                  {t.closeBtn}
                 </button>
               ) : (
                 <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">
