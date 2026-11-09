@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   const t = translations[language];
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/85 dark:bg-slate-950/85 border-b border-slate-200/70 dark:border-slate-850/80 transition-colors">
+    <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/85 dark:bg-slate-950/85 border-b border-slate-200/70 dark:border-slate-800 transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Clickable Logo with restart confirmation */}
         <button

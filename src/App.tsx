@@ -27,6 +27,7 @@ export default function App() {
   const [isConfirmRestartModalOpen, setIsConfirmRestartModalOpen] = useState(false);
   const [isSetupModalOpen, setIsSetupModalOpen] = useState(false);
   const [setupInitialStep, setSetupInitialStep] = useState<SetupStep>('language');
+  const [isOnboarding, setIsOnboarding] = useState<boolean>(false);
 
   // Dark mode state
   const [darkMode, setDarkMode] = useState<boolean>(() => {
@@ -46,9 +47,10 @@ export default function App() {
     }
   }, [darkMode]);
 
-  // Restore draft if available
+  // Restore draft or trigger onboarding if first visit
   useEffect(() => {
     const draft = loadDraft();
+    const onboardingDone = localStorage.getItem('mindcheck_onboarding_completed');
     if (draft && Object.keys(draft.answers).length > 0) {
       setAnswers(draft.answers);
       setCurrentStep(draft.currentStep || 0);
@@ -56,6 +58,10 @@ export default function App() {
       setLanguage(draft.language || 'uk');
       setBirthYear(draft.birthYear);
       setStage('assessment');
+    } else if (!onboardingDone) {
+      setIsOnboarding(true);
+      setSetupInitialStep('language');
+      setIsSetupModalOpen(true);
     }
   }, []);
 
@@ -65,13 +71,21 @@ export default function App() {
   const currentQuestion = questions[currentStep];
 
   // Open setup popup at a specific step
-  const handleOpenSetup = (step: SetupStep = 'language') => {
+  const handleOpenSetup = (step: SetupStep = 'language', onboardingMode = false) => {
+    setIsOnboarding(onboardingMode);
     setSetupInitialStep(step);
     setIsSetupModalOpen(true);
   };
 
-  // Start assessment from welcome or setup modal
+  // Start assessment from welcome or setup modal (birthYear is strictly required)
   const handleStartAssessment = () => {
+    if (!birthYear) {
+      handleOpenSetup('birth_year', true);
+      return;
+    }
+    localStorage.setItem('mindcheck_onboarding_completed', 'true');
+    setIsOnboarding(false);
+    setIsSetupModalOpen(false);
     clearDraft();
     setAnswers({});
     setCurrentStep(0);
@@ -186,7 +200,7 @@ export default function App() {
         onToggleDarkMode={() => setDarkMode((prev) => !prev)}
       />
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col justify-center">
         {/* Welcome / Home Stage */}
         {stage === 'welcome' && (
           <div className="space-y-6 animate-fade-in">
@@ -208,7 +222,7 @@ export default function App() {
               </div>
 
               {/* Current Configuration Summary Card with popup edit links */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-850/70 border border-slate-200/80 dark:border-slate-700/80 space-y-3">
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                     Параметри оцінювання
@@ -362,6 +376,7 @@ export default function App() {
         onSelectMode={(m) => setMode(m)}
         onStartAssessment={handleStartAssessment}
         initialStep={setupInitialStep}
+        isOnboarding={isOnboarding}
       />
 
       {/* Logo Restart Confirmation Popup */}

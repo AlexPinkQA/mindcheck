@@ -233,7 +233,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         </div>
 
         {/* Depression Score Block */}
-        <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-850/60 border border-slate-200/70 dark:border-slate-800/80 space-y-4">
+        <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
@@ -242,13 +242,13 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
                   {depSeverity.label}
                 </span>
               </div>
-              <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+              <p className="text-slate-600 dark:text-slate-200 text-xs sm:text-sm leading-relaxed max-w-lg">
                 {depSeverity.desc}
               </p>
             </div>
-            <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
+            <div className="sm:text-right shrink-0 bg-white dark:bg-slate-900 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
               <span className="text-3xl font-black text-slate-900 dark:text-white">{result.depressionScore}</span>
-              <span className="text-xs font-semibold text-slate-400 dark:text-slate-500"> / 27 {t.points}</span>
+              <span className="text-xs font-semibold text-slate-400 dark:text-slate-400"> / 27 {t.points}</span>
             </div>
           </div>
 
@@ -271,7 +271,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
 
         {/* Anxiety Score Block (if deep assessment) */}
         {result.anxietyScore !== undefined && anxSeverity && (
-          <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-850/60 border border-slate-200/70 dark:border-slate-800/80 space-y-4">
+          <div className="p-5 sm:p-6 rounded-3xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -280,13 +280,13 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
                     {anxSeverity.label}
                   </span>
                 </div>
-                <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-lg">
+                <p className="text-slate-600 dark:text-slate-200 text-xs sm:text-sm leading-relaxed max-w-lg">
                   {anxSeverity.desc}
                 </p>
               </div>
-              <div className="sm:text-right shrink-0 bg-white dark:bg-slate-800 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
+              <div className="sm:text-right shrink-0 bg-white dark:bg-slate-900 px-5 py-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-sm">
                 <span className="text-3xl font-black text-slate-900 dark:text-white">{result.anxietyScore}</span>
-                <span className="text-xs font-semibold text-slate-400 dark:text-slate-500"> / 21 {t.points}</span>
+                <span className="text-xs font-semibold text-slate-400 dark:text-slate-400"> / 21 {t.points}</span>
               </div>
             </div>
 
@@ -337,9 +337,9 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
             </h3>
             <ul className="space-y-2.5">
               {result.insights.map((insight, idx) => (
-                <li key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50/70 dark:bg-slate-850/50 border border-slate-200/60 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300">
+                <li key={idx} className="flex items-start gap-3 p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/80 text-sm text-slate-800 dark:text-slate-100">
                   <CheckCircle2 className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
-                  <span>{insight}</span>
+                  <span className="font-medium">{insight}</span>
                 </li>
               ))}
             </ul>
@@ -353,7 +353,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
           </h3>
           <ul className="space-y-3">
             {result.recommendations.map((rec, idx) => (
-              <li key={idx} className="p-4 bg-slate-50/80 dark:bg-slate-850/60 rounded-2xl border border-slate-200/50 dark:border-slate-700/80 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              <li key={idx} className="p-4 bg-slate-50/80 dark:bg-slate-800/80 rounded-2xl border border-slate-200/70 dark:border-slate-700/80 text-sm text-slate-800 dark:text-slate-100 leading-relaxed font-medium">
                 {rec}
               </li>
             ))}
@@ -369,7 +369,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
           <button
             type="button"
             onClick={handleCopyReport}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition shadow-2xs cursor-pointer active:scale-95"
           >
             {copied ? (
               <>
@@ -391,7 +391,7 @@ ${result.recommendations.map((r) => `• ${r}`).join('\n')}
         <button
           type="button"
           onClick={onRetake}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-2xs cursor-pointer active:scale-95"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm font-bold hover:bg-slate-100 dark:hover:bg-slate-700 transition shadow-2xs cursor-pointer active:scale-95"
         >
           <RotateCcw className="w-4 h-4" />
           <span>{t.retakeBtn}</span>

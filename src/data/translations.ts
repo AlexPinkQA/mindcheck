@@ -59,6 +59,10 @@ export interface TranslationStrings {
   upgradeToDeepDesc: string;
   upgradeToDeepBtn: string;
   upgradeToDeepDecline: string;
+  stepLanguage: string;
+  stepAge: string;
+  stepMode: string;
+  onboardingStepOf: (current: number, total: number) => string;
 }
 
 export const translations: Record<Language, TranslationStrings> = {
@@ -121,6 +125,10 @@ export const translations: Record<Language, TranslationStrings> = {
     upgradeToDeepDesc: 'Ви успішно пройшли експрес-оцінку депресивних проявів (PHQ-9). Психічний стан часто складається з кількох компонентів. Якщо ви зараз відчуваєте в собі внутрішній ресурс — ви можете відповісти ще на 11 питань (шкала тривожності GAD-7, якість сну та соматика). Усі ваші вже заповнені відповіді зберігаються!',
     upgradeToDeepBtn: '✨ Продовжити до Deep Research (+11 питань)',
     upgradeToDeepDecline: 'Залишити поточний результат',
+    stepLanguage: '1. Мова',
+    stepAge: '2. Вік',
+    stepMode: '3. Формат',
+    onboardingStepOf: (c, t) => `Крок ${c} з ${t}`,
   },
   en: {
     title: 'MindCheck',
@@ -181,6 +189,10 @@ export const translations: Record<Language, TranslationStrings> = {
     upgradeToDeepDesc: 'You completed the express screening (PHQ-9). Mental well-being is multifaceted. If you feel up to it and have the emotional capacity, you can expand this into Deep Research (11 more questions covering GAD-7 anxiety, sleep quality, and daily impact). Your existing answers are preserved!',
     upgradeToDeepBtn: '✨ Continue to Deep Research (+11 questions)',
     upgradeToDeepDecline: 'Keep current result',
+    stepLanguage: '1. Language',
+    stepAge: '2. Age',
+    stepMode: '3. Format',
+    onboardingStepOf: (c, t) => `Step ${c} of ${t}`,
   },
   es: {
     title: 'MindCheck',
@@ -241,6 +253,10 @@ export const translations: Record<Language, TranslationStrings> = {
     upgradeToDeepDesc: 'Ha completado la evaluación exprés (PHQ-9). Si se siente con fuerzas y recursos emocionales, puede ampliarla a Deep Research (11 preguntas adicionales sobre ansiedad GAD-7, calidad del sueño y somatización). ¡Sus respuestas se conservan!',
     upgradeToDeepBtn: '✨ Continuar a Deep Research (+11 preguntas)',
     upgradeToDeepDecline: 'Conservar resultado actual',
+    stepLanguage: '1. Idioma',
+    stepAge: '2. Edad',
+    stepMode: '3. Formato',
+    onboardingStepOf: (c, t) => `Paso ${c} de ${t}`,
   },
   pt: {
     title: 'MindCheck',
@@ -301,5 +317,9 @@ export const translations: Record<Language, TranslationStrings> = {
     upgradeToDeepDesc: 'Concluiu a avaliação expressa (PHQ-9). Se sentir que tem energia e capacidade emocional no momento, pode expandir para o Deep Research (mais 11 perguntas sobre ansiedade GAD-7, sono e impacto no quotidiano). As respostas anteriores são mantidas!',
     upgradeToDeepBtn: '✨ Continuar para Deep Research (+11 perguntas)',
     upgradeToDeepDecline: 'Manter resultado atual',
+    stepLanguage: '1. Idioma',
+    stepAge: '2. Idade',
+    stepMode: '3. Formato',
+    onboardingStepOf: (c, t) => `Passo ${c} de ${t}`,
   }
 };
