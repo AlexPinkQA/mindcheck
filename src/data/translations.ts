@@ -46,6 +46,15 @@ export interface TranslationStrings {
   retakeBtn: string;
   footerText: string;
   footerLocal: string;
+  welcomeCta: string;
+  configureBtn: string;
+  selectedFormat: string;
+  selectedAge: string;
+  notSpecified: string;
+  privacyTitle: string;
+  privacyDesc: string;
+  clinicalTitle: string;
+  clinicalDesc: string;
 }
 
 export const translations: Record<Language, TranslationStrings> = {
@@ -95,6 +104,15 @@ export const translations: Record<Language, TranslationStrings> = {
     retakeBtn: 'Пройти оцінювання знову',
     footerText: 'MindCheck — Некомерційний відкритий проєкт психоемоційного скринінгу.',
     footerLocal: 'Усі обчислення виконуються локально у вашому браузері.',
+    welcomeCta: 'Почати тестування',
+    configureBtn: 'Налаштувати параметри',
+    selectedFormat: 'Формат тесту',
+    selectedAge: 'Вікова категорія',
+    notSpecified: 'Не вказано (натисніть щоб обрати)',
+    privacyTitle: 'Повна конфіденційність (Zero-Data)',
+    privacyDesc: 'Ваші відповіді не надсилаються на жоден сервер і зберігаються лише у памʼяті вашого браузера.',
+    clinicalTitle: 'Науково валідовані шкали',
+    clinicalDesc: 'Використовуються стандартизовані протоколи PHQ-9 (депресія) та GAD-7 (тривожність), визнані ВООЗ.',
   },
   en: {
     title: 'MindCheck',
@@ -142,6 +160,15 @@ export const translations: Record<Language, TranslationStrings> = {
     retakeBtn: 'Retake Assessment',
     footerText: 'MindCheck — Open confidential mental wellness screening.',
     footerLocal: 'All calculations are performed locally inside your browser.',
+    welcomeCta: 'Start Assessment',
+    configureBtn: 'Configure Settings',
+    selectedFormat: 'Assessment format',
+    selectedAge: 'Age category',
+    notSpecified: 'Not specified (click to set)',
+    privacyTitle: 'Zero-Data Privacy',
+    privacyDesc: 'Your answers are never sent to any server. Everything is evaluated locally in your browser.',
+    clinicalTitle: 'Clinically Validated Scales',
+    clinicalDesc: 'Utilizes standardized PHQ-9 (depression) and GAD-7 (anxiety) protocols recommended by WHO.',
   },
   es: {
     title: 'MindCheck',
@@ -189,6 +216,15 @@ export const translations: Record<Language, TranslationStrings> = {
     retakeBtn: 'Realizar la prueba de nuevo',
     footerText: 'MindCheck — Proyecto abierto de evaluación psicoemocional.',
     footerLocal: 'Todos los cálculos se realizan localmente en su navegador.',
+    welcomeCta: 'Comenzar evaluación',
+    configureBtn: 'Configurar parámetros',
+    selectedFormat: 'Formato de prueba',
+    selectedAge: 'Categoría de edad',
+    notSpecified: 'No especificado (clic para elegir)',
+    privacyTitle: 'Privacidad Zero-Data',
+    privacyDesc: 'Sus respuestas nunca se envían a ningún servidor. Todo se calcula localmente.',
+    clinicalTitle: 'Escalas clínicamente validadas',
+    clinicalDesc: 'Utiliza los protocolos estandarizados PHQ-9 (depresión) y GAD-7 (ansiedad).',
   },
   pt: {
     title: 'MindCheck',
@@ -236,5 +272,14 @@ export const translations: Record<Language, TranslationStrings> = {
     retakeBtn: 'Repetir avaliação',
     footerText: 'MindCheck — Projeto aberto de rastreio psicoemocional.',
     footerLocal: 'Todos os cálculos são executados localmente no seu navegador.',
+    welcomeCta: 'Iniciar avaliação',
+    configureBtn: 'Configurar parâmetros',
+    selectedFormat: 'Formato da avaliação',
+    selectedAge: 'Faixa etária',
+    notSpecified: 'Não especificado (clique para escolher)',
+    privacyTitle: 'Privacidade Zero-Data',
+    privacyDesc: 'As suas respostas nunca são enviadas para nenhum servidor. Tudo ocorre localmente.',
+    clinicalTitle: 'Escalas clinicamente validadas',
+    clinicalDesc: 'Utiliza os protocolos estandardizados PHQ-9 (depressão) e GAD-7 (ansiedade).',
   }
 };
