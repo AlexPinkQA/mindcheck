@@ -42,14 +42,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
   initialStep = 'language',
   isOnboarding = false,
 }) => {
+  const getCategoryForMode = (m: AssessmentMode): AssessmentCategory => {
+    if (m === 'express' || m === 'deep') return 'mood';
+    if (m === 'dass21') return 'stress';
+    return 'trauma';
+  };
+
   const [activeStep, setActiveStep] = useState<SetupStep>(initialStep);
-  const [selectedCategory, setSelectedCategory] = useState<AssessmentCategory | 'all'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<AssessmentCategory>(() => getCategoryForMode(mode));
 
   useEffect(() => {
     if (isOpen) {
       setActiveStep(initialStep);
+      setSelectedCategory(getCategoryForMode(mode));
     }
-  }, [isOpen, initialStep]);
+  }, [isOpen, initialStep, mode]);
 
   if (!isOpen) return null;
 
@@ -270,63 +277,66 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                 {t.selectModeSubtitle}
               </p>
 
-              {/* Category Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+              {/* Category Segmented Switcher */}
+              <div className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 dark:bg-slate-800/90 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
                 <button
                   type="button"
-                  onClick={() => setSelectedCategory('all')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                    selectedCategory === 'all'
-                      ? 'bg-teal-700 text-white shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
-                  }`}
-                >
-                  {t.allCategoriesTab}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCategory('mood')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  onClick={() => {
+                    setSelectedCategory('mood');
+                    if (mode !== 'express' && mode !== 'deep') onSelectMode('express');
+                  }}
+                  className={`py-2 px-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     selectedCategory === 'mood'
-                      ? 'bg-teal-700 text-white shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-white dark:bg-slate-900 text-teal-800 dark:text-teal-300 shadow-xs border border-slate-200/60 dark:border-slate-700'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  🌧️ {t.sectionMood}
+                  <span>🌧️</span>
+                  <span className="truncate">{t.sectionMood}</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedCategory('stress')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  onClick={() => {
+                    setSelectedCategory('stress');
+                    onSelectMode('dass21');
+                  }}
+                  className={`py-2 px-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     selectedCategory === 'stress'
-                      ? 'bg-teal-700 text-white shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-white dark:bg-slate-900 text-teal-800 dark:text-teal-300 shadow-xs border border-slate-200/60 dark:border-slate-700'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  ⚖️ {t.sectionStress}
+                  <span>⚖️</span>
+                  <span className="truncate">{t.sectionStress}</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => setSelectedCategory('trauma')}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  onClick={() => {
+                    setSelectedCategory('trauma');
+                    if (mode !== 'pc_ptsd_5' && mode !== 'pcl5' && mode !== 'itq') onSelectMode('pc_ptsd_5');
+                  }}
+                  className={`py-2 px-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer ${
                     selectedCategory === 'trauma'
-                      ? 'bg-teal-700 text-white shadow-xs'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? 'bg-white dark:bg-slate-900 text-teal-800 dark:text-teal-300 shadow-xs border border-slate-200/60 dark:border-slate-700'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
-                  🛡️ {t.sectionTrauma}
+                  <span>🛡️</span>
+                  <span className="truncate">{t.sectionTrauma}</span>
                 </button>
               </div>
 
+              {/* Category Subtitle Helper */}
+              <p className="text-xs text-slate-500 dark:text-slate-400 px-1 leading-relaxed">
+                {selectedCategory === 'mood' && t.sectionMoodDesc}
+                {selectedCategory === 'stress' && t.sectionStressDesc}
+                {selectedCategory === 'trauma' && t.sectionTraumaDesc}
+              </p>
+
               <div className="space-y-3 pt-1">
                 {/* MOOD CATEGORY */}
-                {(selectedCategory === 'all' || selectedCategory === 'mood') && (
+                {selectedCategory === 'mood' && (
                   <>
-                    {selectedCategory === 'all' && (
-                      <div className="pt-2 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                        🌧️ {t.sectionMood}
-                      </div>
-                    )}
                     {/* Express Option */}
                     <button
                       type="button"
@@ -416,13 +426,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                 )}
 
                 {/* STRESS CATEGORY */}
-                {(selectedCategory === 'all' || selectedCategory === 'stress') && (
+                {selectedCategory === 'stress' && (
                   <>
-                    {selectedCategory === 'all' && (
-                      <div className="pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                        ⚖️ {t.sectionStress}
-                      </div>
-                    )}
                     {/* DASS-21 Option */}
                     <button
                       type="button"
@@ -469,13 +474,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                 )}
 
                 {/* TRAUMA & PTSD CATEGORY */}
-                {(selectedCategory === 'all' || selectedCategory === 'trauma') && (
+                {selectedCategory === 'trauma' && (
                   <>
-                    {selectedCategory === 'all' && (
-                      <div className="pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                        🛡️ {t.sectionTrauma}
-                      </div>
-                    )}
                     {/* PC-PTSD-5 Screen */}
                     <button
                       type="button"

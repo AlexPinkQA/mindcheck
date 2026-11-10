@@ -8,9 +8,15 @@ import { QuestionCard } from './components/QuestionCard';
 import { ResultsSummary } from './components/ResultsSummary';
 import { getQuestions } from './data/questions';
 import { evaluateAssessment, saveDraft, loadDraft, clearDraft } from './core/engine';
-import { AssessmentMode, AssessmentResult } from './types/assessment';
+import { AssessmentCategory, AssessmentMode, AssessmentResult } from './types/assessment';
 import { Language, translations } from './data/translations';
-import { ShieldCheck, ArrowRight, Settings2, Brain, Sliders } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Brain, Sliders, Globe, Calendar, Zap, Microscope, Activity, Shield, Check } from 'lucide-react';
+
+const getCategoryForMode = (m: AssessmentMode): AssessmentCategory => {
+  if (m === 'express' || m === 'deep') return 'mood';
+  if (m === 'dass21') return 'stress';
+  return 'trauma';
+};
 
 type FlowStage = 'welcome' | 'assessment' | 'result';
 
@@ -19,8 +25,13 @@ export default function App() {
   const [language, setLanguage] = useState<Language>('uk');
   const [birthYear, setBirthYear] = useState<number | undefined>(undefined);
   const [mode, setMode] = useState<AssessmentMode>('express');
+  const [activeCategory, setActiveCategory] = useState<AssessmentCategory>(() => getCategoryForMode(mode));
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [currentStep, setCurrentStep] = useState(0);
+
+  useEffect(() => {
+    setActiveCategory(getCategoryForMode(mode));
+  }, [mode]);
 
   // Modals state
   const [isCrisisModalOpen, setIsCrisisModalOpen] = useState(false);
@@ -230,167 +241,303 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Current Configuration Summary Card with popup edit links */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                    {t.testParameters}
-                  </span>
+              {/* Quick Settings Profile Bar */}
+              <div className="flex flex-wrap items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs font-semibold">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[11px]">{t.languageLabel}:</span>
                   <button
                     type="button"
                     onClick={() => handleOpenSetup('language')}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 dark:text-teal-400 hover:text-teal-900 dark:hover:text-teal-300 transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs"
                   >
-                    <Sliders className="w-3.5 h-3.5" />
-                    <span>{t.changeAll}</span>
+                    <Globe className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                    <span>{language === 'uk' ? '🇺🇦 Українська' : language === 'en' ? '🇬🇧 English' : language === 'es' ? '🇪🇸 Español' : '🇵🇹 Português'}</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                  {/* Language Item */}
-                  <button
-                    type="button"
-                    onClick={() => handleOpenSetup('language')}
-                    className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-left hover:border-teal-400 dark:hover:border-teal-500 transition group cursor-pointer shadow-2xs"
-                  >
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.languageLabel}</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                      {language === 'uk' && '🇺🇦 Українська'}
-                      {language === 'en' && '🇬🇧 English'}
-                      {language === 'es' && '🇪🇸 Español'}
-                      {language === 'pt' && '🇵🇹 Português'}
-                    </span>
-                  </button>
-
-                  {/* Birth Year / Age Item */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[11px]">{t.birthYearLabel}:</span>
                   <button
                     type="button"
                     onClick={() => handleOpenSetup('birth_year')}
-                    className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-left hover:border-teal-400 dark:hover:border-teal-500 transition group cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs"
                   >
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedAge}</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors truncate block">
-                      {birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}
-                    </span>
+                    <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                    <span>{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
                   </button>
 
-                  {/* Mode Item */}
                   <button
                     type="button"
-                    onClick={() => handleOpenSetup('mode')}
-                    className="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-left hover:border-teal-400 dark:hover:border-teal-500 transition group cursor-pointer shadow-2xs"
+                    onClick={() => handleOpenSetup('language')}
+                    className="p-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition cursor-pointer shadow-2xs"
+                    title={t.setupTooltip}
                   >
-                    <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedFormat}</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                      {mode === 'express' && t.expressBadge}
-                      {mode === 'deep' && t.deepBadge}
-                      {mode === 'dass21' && t.dassBadge}
-                      {mode === 'pc_ptsd_5' && t.pcPtsdBadge}
-                      {mode === 'pcl5' && t.pcl5Badge}
-                      {mode === 'itq' && t.itqBadge}
-                    </span>
+                    <Sliders className="w-4 h-4" />
                   </button>
-                </div>
-
-                {/* Thematic Category Fast Selection */}
-                <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 space-y-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
-                    {t.categoryLabel}
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {/* Mood Category Card */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode('express');
-                        handleOpenSetup('mode');
-                      }}
-                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
-                        mode === 'express' || mode === 'deep'
-                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
-                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-sm">🌧️</span>
-                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
-                          {t.sectionMood}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
-                        {t.sectionMoodDesc}
-                      </p>
-                    </button>
-
-                    {/* Stress Category Card */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode('dass21');
-                        handleOpenSetup('mode');
-                      }}
-                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
-                        mode === 'dass21'
-                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
-                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-sm">⚖️</span>
-                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
-                          {t.sectionStress}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
-                        {t.sectionStressDesc}
-                      </p>
-                    </button>
-
-                    {/* Trauma & PTSD Category Card */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMode('pc_ptsd_5');
-                        handleOpenSetup('mode');
-                      }}
-                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
-                        mode === 'pc_ptsd_5' || mode === 'pcl5' || mode === 'itq'
-                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
-                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <span className="text-sm">🛡️</span>
-                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
-                          {t.sectionTrauma}
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
-                        {t.sectionTraumaDesc}
-                      </p>
-                    </button>
-                  </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+              {/* Main Thematic Assessment Selection */}
+              <div className="space-y-3.5 pt-1">
+                <div className="flex items-center justify-between px-0.5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                    {t.selectModeTitle}
+                  </span>
+                  <span className="text-xs font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-200/60 dark:border-teal-800">
+                    {mode === 'express' && t.expressBadge}
+                    {mode === 'deep' && t.deepBadge}
+                    {mode === 'dass21' && t.dassBadge}
+                    {mode === 'pc_ptsd_5' && t.pcPtsdBadge}
+                    {mode === 'pcl5' && t.pcl5Badge}
+                    {mode === 'itq' && t.itqBadge}
+                  </span>
+                </div>
+
+                {/* Category Segmented Tabs */}
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1.5 bg-slate-100/90 dark:bg-slate-800/90 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveCategory('mood');
+                      if (mode !== 'express' && mode !== 'deep') setMode('express');
+                    }}
+                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      activeCategory === 'mood'
+                        ? 'bg-white dark:bg-slate-900 text-teal-900 dark:text-teal-300 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>🌧️</span>
+                    <span className="truncate">{t.sectionMood}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveCategory('stress');
+                      setMode('dass21');
+                    }}
+                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      activeCategory === 'stress'
+                        ? 'bg-white dark:bg-slate-900 text-teal-900 dark:text-teal-300 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>⚖️</span>
+                    <span className="truncate">{t.sectionStress}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveCategory('trauma');
+                      if (mode !== 'pc_ptsd_5' && mode !== 'pcl5' && mode !== 'itq') setMode('pc_ptsd_5');
+                    }}
+                    className={`px-3 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      activeCategory === 'trauma'
+                        ? 'bg-white dark:bg-slate-900 text-teal-900 dark:text-teal-300 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>🛡️</span>
+                    <span className="truncate">{t.sectionTrauma}</span>
+                  </button>
+                </div>
+
+                {/* Category Helper Description */}
+                <p className="text-xs text-slate-500 dark:text-slate-400 px-1 leading-relaxed">
+                  {activeCategory === 'mood' && t.sectionMoodDesc}
+                  {activeCategory === 'stress' && t.sectionStressDesc}
+                  {activeCategory === 'trauma' && t.sectionTraumaDesc}
+                </p>
+
+                {/* Direct Interactive Assessment Cards for Active Category */}
+                <div className="space-y-2.5 pt-1">
+                  {/* Mood Tests */}
+                  {activeCategory === 'mood' && (
+                    <>
+                      {/* Express (PHQ-9) */}
+                      <button
+                        type="button"
+                        onClick={() => setMode('express')}
+                        className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                          mode === 'express'
+                            ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'express' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                            <Zap className="w-5 h-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.expressTitle}</span>
+                              <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.expressTime}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.expressDesc}</p>
+                          </div>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'express' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                          {mode === 'express' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                        </div>
+                      </button>
+
+                      {/* Deep Research */}
+                      <button
+                        type="button"
+                        onClick={() => setMode('deep')}
+                        className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                          mode === 'deep'
+                            ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'deep' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                            <Microscope className="w-5 h-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.deepTitle}</span>
+                              <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.deepTime}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.deepDesc}</p>
+                          </div>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'deep' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                          {mode === 'deep' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                        </div>
+                      </button>
+                    </>
+                  )}
+
+                  {/* Stress Tests */}
+                  {activeCategory === 'stress' && (
+                    <button
+                      type="button"
+                      onClick={() => setMode('dass21')}
+                      className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                        mode === 'dass21'
+                          ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                          : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'dass21' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                          <Activity className="w-5 h-5" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.dassTitle}</span>
+                            <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.dassTime}</span>
+                          </div>
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.dassDesc}</p>
+                        </div>
+                      </div>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'dass21' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                        {mode === 'dass21' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                      </div>
+                    </button>
+                  )}
+
+                  {/* Trauma Tests */}
+                  {activeCategory === 'trauma' && (
+                    <>
+                      {/* PC-PTSD-5 */}
+                      <button
+                        type="button"
+                        onClick={() => setMode('pc_ptsd_5')}
+                        className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                          mode === 'pc_ptsd_5'
+                            ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'pc_ptsd_5' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                            <Zap className="w-5 h-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.pcPtsdTitle}</span>
+                              <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.pcPtsdTime}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.pcPtsdDesc}</p>
+                          </div>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'pc_ptsd_5' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                          {mode === 'pc_ptsd_5' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                        </div>
+                      </button>
+
+                      {/* PCL-5 */}
+                      <button
+                        type="button"
+                        onClick={() => setMode('pcl5')}
+                        className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                          mode === 'pcl5'
+                            ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'pcl5' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                            <Microscope className="w-5 h-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.pcl5Title}</span>
+                              <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.pcl5Time}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.pcl5Desc}</p>
+                          </div>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'pcl5' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                          {mode === 'pcl5' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                        </div>
+                      </button>
+
+                      {/* ITQ */}
+                      <button
+                        type="button"
+                        onClick={() => setMode('itq')}
+                        className={`w-full text-left p-4 sm:p-4.5 rounded-2xl border-2 transition-all flex items-start justify-between gap-3.5 group cursor-pointer ${
+                          mode === 'itq'
+                            ? 'border-teal-600 dark:border-teal-400 bg-teal-50/70 dark:bg-teal-950/70 shadow-md shadow-teal-500/10 ring-2 ring-teal-500/20'
+                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 hover:border-teal-400 dark:hover:border-teal-500'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className={`p-2.5 rounded-xl shrink-0 ${mode === 'itq' ? 'bg-teal-600 text-white dark:bg-teal-400 dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}>
+                            <Shield className="w-5 h-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">{t.itqTitle}</span>
+                              <span className="text-[11px] font-bold text-teal-700 dark:text-teal-400 bg-teal-100/70 dark:bg-teal-900/60 px-2 py-0.5 rounded-md">{t.itqTime}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">{t.itqDesc}</p>
+                          </div>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${mode === 'itq' ? 'border-teal-600 bg-teal-600 dark:border-teal-400 dark:bg-teal-400 text-white dark:text-slate-950' : 'border-slate-300 dark:border-slate-600'}`}>
+                          {mode === 'itq' && <Check className="w-3.5 h-3.5 text-white dark:text-slate-950" />}
+                        </div>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Start Button */}
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={handleStartAssessment}
-                  className="flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-2xl text-base font-bold bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white shadow-lg shadow-teal-600/25 transition-all duration-200 transform active:scale-[0.99] cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4.5 rounded-2xl text-base sm:text-lg font-bold bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white shadow-lg shadow-teal-600/25 transition-all duration-200 transform active:scale-[0.99] cursor-pointer"
                 >
                   <span>{t.welcomeCta}</span>
                   <ArrowRight className="w-5 h-5" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleOpenSetup('language')}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-4 rounded-2xl text-sm font-semibold border border-slate-300/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer active:scale-[0.99]"
-                >
-                  <Settings2 className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                  <span>{t.configureBtn}</span>
                 </button>
               </div>
             </div>
@@ -407,7 +554,7 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-2.5 shadow-sm">
+              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-5 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3 shadow-sm">
                 <div className="p-2.5 bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-400 rounded-2xl w-fit">
                   <Brain className="w-5 h-5" />
                 </div>
@@ -415,6 +562,26 @@ export default function App() {
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                   {t.clinicalDesc}
                 </p>
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    PHQ-9
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    GAD-7
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    DASS-21
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    PC-PTSD-5
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    PCL-5 (DSM-5)
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700">
+                    ITQ (МКХ-11)
+                  </span>
+                </div>
               </div>
             </div>
           </div>
