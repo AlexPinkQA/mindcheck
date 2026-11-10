@@ -108,6 +108,15 @@ export default function App() {
     });
   };
 
+  // Upgrade from PC-PTSD-5 to comprehensive PCL-5
+  const handleUpgradeToPcl = () => {
+    setMode('pcl5');
+    clearDraft();
+    setAnswers({});
+    setCurrentStep(0);
+    setStage('assessment');
+  };
+
   // Header Logo click: ask confirmation if currently taking test or on results
   const handleLogoClick = () => {
     if (stage === 'assessment' || stage === 'result' || Object.keys(answers).length > 0) {
@@ -273,9 +282,94 @@ export default function App() {
                   >
                     <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-semibold mb-0.5">{t.selectedFormat}</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
-                      {mode === 'express' ? t.expressBadge : mode === 'deep' ? t.deepBadge : t.dassBadge}
+                      {mode === 'express' && t.expressBadge}
+                      {mode === 'deep' && t.deepBadge}
+                      {mode === 'dass21' && t.dassBadge}
+                      {mode === 'pc_ptsd_5' && t.pcPtsdBadge}
+                      {mode === 'pcl5' && t.pcl5Badge}
+                      {mode === 'itq' && t.itqBadge}
                     </span>
                   </button>
+                </div>
+
+                {/* Thematic Category Fast Selection */}
+                <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 space-y-2">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">
+                    {t.categoryLabel}
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {/* Mood Category Card */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('express');
+                        handleOpenSetup('mode');
+                      }}
+                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
+                        mode === 'express' || mode === 'deep'
+                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
+                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🌧️</span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                          {t.sectionMood}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
+                        {t.sectionMoodDesc}
+                      </p>
+                    </button>
+
+                    {/* Stress Category Card */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('dass21');
+                        handleOpenSetup('mode');
+                      }}
+                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
+                        mode === 'dass21'
+                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
+                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">⚖️</span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                          {t.sectionStress}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
+                        {t.sectionStressDesc}
+                      </p>
+                    </button>
+
+                    {/* Trauma & PTSD Category Card */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode('pc_ptsd_5');
+                        handleOpenSetup('mode');
+                      }}
+                      className={`p-3 rounded-xl border text-left transition group cursor-pointer ${
+                        mode === 'pc_ptsd_5' || mode === 'pcl5' || mode === 'itq'
+                          ? 'bg-teal-50/80 dark:bg-teal-950/50 border-teal-300 dark:border-teal-700 shadow-2xs'
+                          : 'bg-white/80 dark:bg-slate-800/80 border-slate-200/80 dark:border-slate-700/80 hover:border-teal-400 dark:hover:border-teal-500'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className="text-sm">🛡️</span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400">
+                          {t.sectionTrauma}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
+                        {t.sectionTraumaDesc}
+                      </p>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -337,7 +431,13 @@ export default function App() {
                   ? `${t.expressTitle} (${questions.length})`
                   : mode === 'deep'
                   ? `${t.deepTitle} (${questions.length})`
-                  : `${t.dassTitle} (${questions.length})`
+                  : mode === 'dass21'
+                  ? `${t.dassTitle} (${questions.length})`
+                  : mode === 'pc_ptsd_5'
+                  ? `${t.pcPtsdTitle} (${questions.length})`
+                  : mode === 'pcl5'
+                  ? `${t.pcl5Title} (${questions.length})`
+                  : `${t.itqTitle} (${questions.length})`
               }
               language={language}
             />
@@ -360,6 +460,7 @@ export default function App() {
             onRetake={handleRetake}
             onCrisisClick={() => setIsCrisisModalOpen(true)}
             onUpgradeToDeep={mode === 'express' ? handleUpgradeToDeep : undefined}
+            onUpgradeToPcl={mode === 'pc_ptsd_5' && (result.traumaScore ?? 0) >= 3 ? handleUpgradeToPcl : undefined}
             language={language}
           />
         )}

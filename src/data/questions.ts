@@ -3,7 +3,7 @@ import { Language } from './translations';
 
 interface LocalizedQuestionData {
   id: string;
-  category: 'depression' | 'anxiety' | 'stress' | 'sleep' | 'context' | 'crisis';
+  category: 'depression' | 'anxiety' | 'stress' | 'trauma' | 'sleep' | 'context' | 'crisis';
   isCrisisTrigger?: boolean;
   text: Record<Language, string>;
   subtext?: Record<Language, string>;
@@ -61,6 +61,56 @@ const dassFrequencyOptions: Record<Language, { value: number; label: string }[]>
     { value: 1, label: 'Aplicou-se a mim em algum grau / às vezes' },
     { value: 2, label: 'Aplicou-se a mim em grau considerável / frequentemente' },
     { value: 3, label: 'Aplicou-se a mim muito / a maior parte do tempo' },
+  ],
+};
+
+const yesNoOptions: Record<Language, { value: number; label: string }[]> = {
+  uk: [
+    { value: 0, label: 'Ні' },
+    { value: 1, label: 'Так' },
+  ],
+  en: [
+    { value: 0, label: 'No' },
+    { value: 1, label: 'Yes' },
+  ],
+  es: [
+    { value: 0, label: 'No' },
+    { value: 1, label: 'Sí' },
+  ],
+  pt: [
+    { value: 0, label: 'Não' },
+    { value: 1, label: 'Sim' },
+  ],
+};
+
+const pclLikertOptions: Record<Language, { value: number; label: string }[]> = {
+  uk: [
+    { value: 0, label: 'Зовсім ні' },
+    { value: 1, label: 'Трохи' },
+    { value: 2, label: 'Помірно' },
+    { value: 3, label: 'Сильно' },
+    { value: 4, label: 'Надзвичайно' },
+  ],
+  en: [
+    { value: 0, label: 'Not at all' },
+    { value: 1, label: 'A little bit' },
+    { value: 2, label: 'Moderately' },
+    { value: 3, label: 'Quite a bit' },
+    { value: 4, label: 'Extremely' },
+  ],
+  es: [
+    { value: 0, label: 'Para nada' },
+    { value: 1, label: 'Un poco' },
+    { value: 2, label: 'Moderadamente' },
+    { value: 3, label: 'Bastante' },
+    { value: 4, label: 'Extremadamente' },
+  ],
+  pt: [
+    { value: 0, label: 'De modo nenhum' },
+    { value: 1, label: 'Um pouco' },
+    { value: 2, label: 'Moderadamente' },
+    { value: 3, label: 'Bastante' },
+    { value: 4, label: 'Extremamente' },
   ],
 };
 
@@ -735,6 +785,568 @@ const rawDassQuestions: LocalizedQuestionData[] = [
   },
 ];
 
+// --- Trauma Subtexts ---
+const pcPtsdSubtext: Record<Language, string> = {
+  uk: "У зв'язку з пережитими важкими або травматичними подіями (за останній місяць):",
+  en: 'In the past month, in relation to stressful or traumatic events you experienced:',
+  es: 'En el último mes, en relación con sucesos traumáticos o muy estresantes vividos:',
+  pt: 'No último mês, relativamente a acontecimentos stressantes ou traumáticos vivenciados:',
+};
+
+const pclSubtext: Record<Language, string> = {
+  uk: 'Протягом останнього місяця, наскільки сильно вас турбувало:',
+  en: 'In the past month, how much were you bothered by:',
+  es: 'En el último mes, ¿en qué medida le ha molestado:',
+  pt: 'No último mês, quanto o incomodou:',
+};
+
+const itqSubtext: Record<Language, string> = {
+  uk: 'Протягом останнього місяця у звʼязку з пережитим стресовим досвідом:',
+  en: 'In the past month in relation to your stressful experience:',
+  es: 'En el último mes en relación con su experiencia estresante:',
+  pt: 'No último mês relativamente à sua experiência stressante:',
+};
+
+// --- PC-PTSD-5 (Primary Care PTSD Screen - 5 questions) ---
+const rawPcPtsdQuestions: LocalizedQuestionData[] = [
+  {
+    id: 'pc_1',
+    category: 'trauma',
+    text: {
+      uk: 'Мали кошмари про подію(-ї) або думали про неї, коли не хотіли цього?',
+      en: 'Had nightmares about the event(s) or thought about the event(s) when you did not want to?',
+      es: '¿Ha tenido pesadillas sobre el suceso o ha pensado en él cuando no quería hacerlo?',
+      pt: 'Teve pesadelos sobre o acontecimento ou pensou nele quando não queria?',
+    },
+    subtext: pcPtsdSubtext,
+    customOptions: yesNoOptions,
+  },
+  {
+    id: 'pc_2',
+    category: 'trauma',
+    text: {
+      uk: 'Докладали зусиль, щоб не думати про подію(-ї) або уникали ситуацій, місць чи людей, що нагадують про неї?',
+      en: 'Tried hard not to think about the event(s) or went out of your way to avoid situations that reminded you of it?',
+      es: '¿Se esforzó mucho por no pensar en el suceso o evitó situaciones que se lo recordaban?',
+      pt: 'Esforçou-se muito para não pensar no acontecimento ou evitou situações que o recordavam?',
+    },
+    subtext: pcPtsdSubtext,
+    customOptions: yesNoOptions,
+  },
+  {
+    id: 'pc_3',
+    category: 'trauma',
+    text: {
+      uk: 'Були постійно насторожі, напружені або легко лякалися від звичайних звуків чи рухів?',
+      en: 'Were constantly on guard, watchful, or easily startled?',
+      es: '¿Estuvo constantemente en guardia, alerta o se asustaba con facilidad?',
+      pt: 'Esteve constantemente em alerta, vigilante ou sobressaltava-se facilmente?',
+    },
+    subtext: pcPtsdSubtext,
+    customOptions: yesNoOptions,
+  },
+  {
+    id: 'pc_4',
+    category: 'trauma',
+    text: {
+      uk: 'Відчували оніміння або відстороненість від інших людей, занять чи свого оточення?',
+      en: 'Felt numb or detached from people, activities, or your surroundings?',
+      es: '¿Se sintió insensible o distanciado de las personas, actividades o de su entorno?',
+      pt: 'Sentiu-se dormente ou distante das pessoas, atividades ou do ambiente ao seu redor?',
+    },
+    subtext: pcPtsdSubtext,
+    customOptions: yesNoOptions,
+  },
+  {
+    id: 'pc_5',
+    category: 'trauma',
+    text: {
+      uk: 'Відчували провину або не могли перестати звинувачувати себе чи інших у тому, що сталося?',
+      en: 'Felt guilty or unable to stop blaming yourself or others for the event(s) or problems it caused?',
+      es: '¿Se sintió culpable o incapaz de dejar de culparse a sí mismo o a otros por lo sucedido?',
+      pt: 'Sentiu culpa ou incapacidade de parar de culpar a si próprio ou a terceiros pelo sucedido?',
+    },
+    subtext: pcPtsdSubtext,
+    customOptions: yesNoOptions,
+  },
+];
+
+// --- PCL-5 (PTSD Checklist for DSM-5 - 20 questions) ---
+const rawPcl5Questions: LocalizedQuestionData[] = [
+  // Cluster B: Intrusions (1-5)
+  {
+    id: 'pcl_1',
+    category: 'trauma',
+    text: {
+      uk: 'Повторювані, навʼязливі та тривожні спогади про стресову подію?',
+      en: 'Repeated, disturbing, and unwanted memories of the stressful experience?',
+      es: '¿Recuerdos repetidos, angustiantes e involuntarios de la experiencia estresante?',
+      pt: 'Memórias repetidas, perturbadoras e involuntárias da experiência stressante?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_2',
+    category: 'trauma',
+    text: {
+      uk: 'Повторювані тривожні сни чи кошмари, повʼязані зі стресовою подією?',
+      en: 'Repeated, disturbing dreams related to the stressful experience?',
+      es: '¿Sueños perturbadores o pesadillas repetidas relacionadas con la experiencia?',
+      pt: 'Sonhos perturbadores ou pesadelos repetidos relacionados com a experiência?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_3',
+    category: 'trauma',
+    text: {
+      uk: 'Раптове відчуття чи дія так, ніби стресова подія відбувається знову (флешбеки)?',
+      en: 'Suddenly feeling or acting as if the stressful experience were happening again (flashbacks)?',
+      es: '¿Sentir o actuar repentinamente como si la experiencia estuviera ocurriendo de nuevo (flashbacks)?',
+      pt: 'Sentir ou agir subitamente como se a experiência estivesse a acontecer de novo (flashbacks)?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_4',
+    category: 'trauma',
+    text: {
+      uk: 'Сильне емоційне потрясіння чи хвилювання, коли щось нагадувало про подію?',
+      en: 'Feeling very upset when something reminded you of the stressful experience?',
+      es: '¿Sentirse muy alterado cuando algo le recordaba la experiencia estresante?',
+      pt: 'Sentir-se muito perturbado quando algo o lembrava da experiência stressante?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_5',
+    category: 'trauma',
+    text: {
+      uk: 'Сильні тілесні реакції (серцебиття, брак повітря, пітливість), коли щось нагадувало про подію?',
+      en: 'Strong physical reactions (heart pounding, trouble breathing, sweating) when reminded of the experience?',
+      es: '¿Reacciones físicas intensas (latidos fuertes, dificultad para respirar, sudor) ante recordatorios?',
+      pt: 'Reações físicas fortes (palpitações, falta de ar, suores) ao ser lembrado da experiência?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // Cluster C: Avoidance (6-7)
+  {
+    id: 'pcl_6',
+    category: 'trauma',
+    text: {
+      uk: 'Уникнення спогадів, думок або почуттів, повʼязаних зі стресовою подією?',
+      en: 'Avoiding memories, thoughts, or feelings related to the stressful experience?',
+      es: '¿Evitar recuerdos, pensamientos o sentimientos relacionados con la experiencia?',
+      pt: 'Evitar memórias, pensamentos ou sentimentos relacionados com a experiência?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_7',
+    category: 'trauma',
+    text: {
+      uk: 'Уникнення зовнішніх нагадувань (людей, місць, розмов, предметів, ситуацій) про подію?',
+      en: 'Avoiding external reminders (people, places, conversations, objects, situations) of the experience?',
+      es: '¿Evitar recordatorios externos (personas, lugares, conversaciones, objetos, situaciones)?',
+      pt: 'Evitar lembretes externos (pessoas, lugares, conversas, objetos, situações) da experiência?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // Cluster D: Negative Cognitions and Mood (8-14)
+  {
+    id: 'pcl_8',
+    category: 'trauma',
+    text: {
+      uk: 'Труднощі з пригадуванням важливих деталей стресової події?',
+      en: 'Trouble remembering important parts of the stressful experience?',
+      es: '¿Dificultad para recordar partes importantes de la experiencia estresante?',
+      pt: 'Dificuldade em lembrar partes importantes da experiência stressante?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_9',
+    category: 'trauma',
+    text: {
+      uk: 'Стійкі та перебільшені негативні переконання про себе, інших людей чи світ («я зламаний», «нікому не можна вірити»)?',
+      en: 'Strongly negative beliefs about yourself, other people, or the world ("I am damaged", "no one can be trusted")?',
+      es: '¿Creencias marcadamente negativas sobre usted, los demás o el mundo ("estoy roto", "no se puede confiar en nadie")?',
+      pt: 'Crenças fortemente negativas sobre si mesmo, outras pessoas ou o mundo ("estou danificado", "não se pode confiar em ninguém")?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_10',
+    category: 'trauma',
+    text: {
+      uk: 'Звинувачення себе або інших у тому, що сталося, чи в наслідках цієї події?',
+      en: 'Blaming yourself or someone else for the stressful experience or what happened after it?',
+      es: '¿Culparse a sí mismo o a otra persona por lo que ocurrió o por sus consecuencias?',
+      pt: 'Culpar-se a si próprio ou a outrem pela experiência vivida ou pelas suas consequências?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_11',
+    category: 'trauma',
+    text: {
+      uk: 'Стійкі негативні емоції, такі як страх, жах, гнів, провина чи сором?',
+      en: 'Having strong negative feelings such as fear, horror, anger, guilt, or shame?',
+      es: '¿Sentimientos negativos intensos y constantes como miedo, terror, ira, culpa o vergüenza?',
+      pt: 'Sentimentos negativos fortes e contínuos como medo, terror, raiva, culpa ou vergonha?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_12',
+    category: 'trauma',
+    text: {
+      uk: 'Втрата інтересу до занять, які раніше подобалися?',
+      en: 'Loss of interest in activities that you used to enjoy?',
+      es: '¿Pérdida de interés en actividades que antes disfrutaba?',
+      pt: 'Perda de interesse em atividades que costumava apreciar?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_13',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття відстороненості або відчуженості від інших людей?',
+      en: 'Feeling distant or cut off from other people?',
+      es: '¿Sentirse distante o desconectado de los demás?',
+      pt: 'Sentir-se distante ou desconectado das outras pessoas?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_14',
+    category: 'trauma',
+    text: {
+      uk: 'Труднощі з переживанням позитивних емоцій (нездатність відчувати любов чи радість)?',
+      en: 'Trouble experiencing positive feelings (being unable to feel happiness or love)?',
+      es: '¿Dificultad para experimentar sentimientos positivos (incapacidad para sentir felicidad o amor)?',
+      pt: 'Dificuldade em sentir emoções positivas (incapacidade de sentir felicidade ou afeto)?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // Cluster E: Hyperarousal and Reactivity (15-20)
+  {
+    id: 'pcl_15',
+    category: 'trauma',
+    text: {
+      uk: 'Дратівливість, спалахи гніву або агресивна поведінка?',
+      en: 'Irritable behavior, angry outbursts, or acting aggressively?',
+      es: '¿Comportamiento irritable, arrebatos de ira o agresividad?',
+      pt: 'Comportamento irritável, acessos de raiva ou atitudes agressivas?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_16',
+    category: 'trauma',
+    text: {
+      uk: 'Необачна або саморуйнівна поведінка (невиправданий ризик)?',
+      en: 'Taking too many risks or doing things that could cause you harm?',
+      es: '¿Asumir demasiados riesgos o hacer cosas que podrían hacerle daño?',
+      pt: 'Correr riscos excessivos ou fazer coisas que possam causar danos a si próprio?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_17',
+    category: 'trauma',
+    text: {
+      uk: 'Стан підвищеної пильності, настороженості чи постійного очікування небезпеки («надпильність»)?',
+      en: 'Being "superalert" or watchful or on guard (hypervigilance)?',
+      es: '¿Estar "hiperalerta", excesivamente vigilante o en guardia continua?',
+      pt: 'Estar em estado de "hiperalerta", excessivamente vigilante ou em guarda contínua?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_18',
+    category: 'trauma',
+    text: {
+      uk: 'Здригання від несподіваних звуків чи легка переляканість?',
+      en: 'Feeling jumpy or easily startled?',
+      es: '¿Sentirse asustadizo o sobresaltarse con facilidad?',
+      pt: 'Sentir-se assustadiço ou sobressaltar-se com facilidade?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_19',
+    category: 'trauma',
+    text: {
+      uk: 'Труднощі з концентрацією уваги?',
+      en: 'Having difficulty concentrating?',
+      es: '¿Tener dificultad para concentrarse?',
+      pt: 'Dificuldade em concentrar-se?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'pcl_20',
+    category: 'trauma',
+    text: {
+      uk: 'Труднощі із засинанням або неспокійний, уривчастий сон?',
+      en: 'Trouble falling or staying asleep?',
+      es: '¿Dificultad para conciliar o mantener el sueño?',
+      pt: 'Dificuldade em adormecer ou manter o sono?',
+    },
+    subtext: pclSubtext,
+    customOptions: pclLikertOptions,
+  },
+];
+
+// --- ITQ (International Trauma Questionnaire, ICD-11 - 18 questions) ---
+const rawItqQuestions: LocalizedQuestionData[] = [
+  // PTSD Core - Re-experiencing (1-2)
+  {
+    id: 'itq_1',
+    category: 'trauma',
+    text: {
+      uk: 'У розпачі через яскраві спогади, картинки або звуки події?',
+      en: 'Having upsetting vivid dreams, memories, or pictures of the event in your mind?',
+      es: '¿Sentir angustia por recuerdos vívidos, imágenes o sonidos del suceso?',
+      pt: 'Sentir angústia por memórias vívidas, imagens ou sons do acontecimento?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_2',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття, ніби стресова подія відбувається знову тут і зараз?',
+      en: 'Feeling as if the stressful event is happening again in the here and now?',
+      es: '¿Sentir como si el suceso estuviera ocurriendo de nuevo aquí y ahora?',
+      pt: 'Sentir como se o acontecimento estivesse a acontecer de novo aqui e agora?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // PTSD Core - Avoidance (3-4)
+  {
+    id: 'itq_3',
+    category: 'trauma',
+    text: {
+      uk: 'Уникнення внутрішніх думок або почуттів про подію?',
+      en: 'Avoiding internal thoughts or feelings related to the event?',
+      es: '¿Evitar pensamientos o sentimientos internos relacionados con el suceso?',
+      pt: 'Evitar pensamentos ou sentimentos internos relacionados com o acontecimento?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_4',
+    category: 'trauma',
+    text: {
+      uk: 'Уникнення зовнішніх нагадувань (людей, місць, розмов) про подію?',
+      en: 'Avoiding external reminders (people, places, conversations) of the event?',
+      es: '¿Evitar recordatorios externos (personas, lugares, conversaciones) del suceso?',
+      pt: 'Evitar lembretes externos (pessoas, lugares, conversas) do acontecimento?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // PTSD Core - Sense of Current Threat (5-6)
+  {
+    id: 'itq_5',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття постійної небезпеки чи перебування насторожі?',
+      en: 'Being constantly on guard or feeling in danger even when safe?',
+      es: '¿Estar constantemente en guardia o sentir peligro incluso estando seguro?',
+      pt: 'Estar constantemente em alerta ou sentir perigo mesmo quando em segurança?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_6',
+    category: 'trauma',
+    text: {
+      uk: 'Легко здригаєтеся чи лякаєтеся від несподіваних речей?',
+      en: 'Feeling jumpy or easily startled by everyday sounds or movements?',
+      es: '¿Sobresaltarse o asustarse fácilmente con sonidos o movimientos cotidianos?',
+      pt: 'Sobressaltar-se ou assustar-se facilmente com sons ou movimentos quotidianos?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // PTSD Functional Impairment (7-9)
+  {
+    id: 'itq_7',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять ці симптоми вашим стосункам або соціальному життю?',
+      en: 'Do these symptoms affect your relationships or social life?',
+      es: '¿Afectan estos síntomas a sus relaciones o vida social?',
+      pt: 'Estes sintomas afetam os seus relacionamentos ou vida social?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_8',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять вони вашій роботі, навчанню або здатності працювати?',
+      en: 'Do these symptoms affect your work, studies, or ability to work?',
+      es: '¿Afectan a su trabajo, estudios o capacidad para trabajar?',
+      pt: 'Afetam o seu trabalho, estudos ou capacidade laboral?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_9',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять вони іншим важливим сферам щоденного життя?',
+      en: 'Do these symptoms affect other important areas of your daily life?',
+      es: '¿Afectan a otras áreas importantes de su vida diaria?',
+      pt: 'Afetam outras áreas importantes da sua vida diária?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // DSO - Affective Dysregulation (10-11)
+  {
+    id: 'itq_10',
+    category: 'trauma',
+    text: {
+      uk: 'Потрібно багато часу, щоб заспокоїтися після хвилювання або злості?',
+      en: 'When upset, does it take a very long time to calm down?',
+      es: '¿Cuando se altera, tarda mucho tiempo en calmarse?',
+      pt: 'Quando se perturba, demora muito tempo a acalmar-se?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_11',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуваєте емоційне оніміння або нездатність відчувати емоції?',
+      en: 'Do you feel emotionally numb or shut down from feeling emotions?',
+      es: '¿Se siente emocionalmente insensible o incapaz de experimentar emociones?',
+      pt: 'Sente-se emocionalmente dormente ou incapaz de sentir emoções?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // DSO - Negative Self-Concept (12-13)
+  {
+    id: 'itq_12',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття себе невдахою або нездатним нічого досягти?',
+      en: 'Feeling like a failure or having lost confidence in yourself?',
+      es: '¿Sentirse como un fracaso o haber perdido la confianza en sí mismo?',
+      pt: 'Sentir-se um fracasso ou ter perdido a confiança em si próprio?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_13',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття нікчемності чи втрати власної людської цінності?',
+      en: 'Feeling worthless or having no self-worth?',
+      es: '¿Sentirse inútil o carente de valor personal?',
+      pt: 'Sentir-se inútil ou sem valor pessoal?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // DSO - Disturbed Relationships (14-15)
+  {
+    id: 'itq_14',
+    category: 'trauma',
+    text: {
+      uk: 'Відчуття відстороненості чи відчуження від близьких людей?',
+      en: 'Feeling distant or cut off from people close to you?',
+      es: '¿Sentirse distante o desconectado de las personas cercanas?',
+      pt: 'Sentir-se distante ou desligado das pessoas próximas?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_15',
+    category: 'trauma',
+    text: {
+      uk: 'Складно залишатися емоційно близьким з іншими людьми?',
+      en: 'Finding it difficult to stay emotionally close to other people?',
+      es: '¿Le resulta difícil mantenerse emocionalmente cercano a otras personas?',
+      pt: 'Acha difícil manter-se emocionalmente próximo de outras pessoas?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  // DSO Functional Impairment (16-18)
+  {
+    id: 'itq_16',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять ці труднощі з емоціями та самооцінкою вашим стосункам?',
+      en: 'Do these difficulties with emotions and self-worth affect your relationships?',
+      es: '¿Afectan estas dificultades emocionales y de autoestima a sus relaciones?',
+      pt: 'Estas dificuldades com emoções e autoestima afetam as suas relações?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_17',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять вони роботі, навчанню або карʼєрним цілям?',
+      en: 'Do they affect your work, studies, or daily productivity?',
+      es: '¿Afectan a su trabajo, estudios o productividad cotidiana?',
+      pt: 'Afetam o seu trabalho, estudos ou produtividade diária?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+  {
+    id: 'itq_18',
+    category: 'trauma',
+    text: {
+      uk: 'Чи шкодять вони іншим важливим аспектам вашого життя?',
+      en: 'Do they affect other important aspects of your everyday life?',
+      es: '¿Afectan a otros aspectos importantes de su vida cotidiana?',
+      pt: 'Afetam outros aspetos importantes da sua vida quotidiana?',
+    },
+    subtext: itqSubtext,
+    customOptions: pclLikertOptions,
+  },
+];
+
 export function getQuestions(mode: AssessmentMode, lang: Language = 'uk'): Question[] {
   if (mode === 'dass21') {
     return rawDassQuestions.map(q => ({
@@ -743,6 +1355,42 @@ export function getQuestions(mode: AssessmentMode, lang: Language = 'uk'): Quest
       text: q.text[lang] || q.text['en'],
       subtext: q.subtext ? (q.subtext[lang] || q.subtext['en']) : undefined,
       options: dassFrequencyOptions[lang] || dassFrequencyOptions['en'],
+    }));
+  }
+
+  if (mode === 'pc_ptsd_5') {
+    return rawPcPtsdQuestions.map(q => ({
+      id: q.id,
+      category: q.category,
+      text: q.text[lang] || q.text['en'],
+      subtext: q.subtext ? (q.subtext[lang] || q.subtext['en']) : undefined,
+      options: q.customOptions
+        ? (q.customOptions[lang] || q.customOptions['en'])
+        : (yesNoOptions[lang] || yesNoOptions['en']),
+    }));
+  }
+
+  if (mode === 'pcl5') {
+    return rawPcl5Questions.map(q => ({
+      id: q.id,
+      category: q.category,
+      text: q.text[lang] || q.text['en'],
+      subtext: q.subtext ? (q.subtext[lang] || q.subtext['en']) : undefined,
+      options: q.customOptions
+        ? (q.customOptions[lang] || q.customOptions['en'])
+        : (pclLikertOptions[lang] || pclLikertOptions['en']),
+    }));
+  }
+
+  if (mode === 'itq') {
+    return rawItqQuestions.map(q => ({
+      id: q.id,
+      category: q.category,
+      text: q.text[lang] || q.text['en'],
+      subtext: q.subtext ? (q.subtext[lang] || q.subtext['en']) : undefined,
+      options: q.customOptions
+        ? (q.customOptions[lang] || q.customOptions['en'])
+        : (pclLikertOptions[lang] || pclLikertOptions['en']),
     }));
   }
 

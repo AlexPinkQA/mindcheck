@@ -40,6 +40,39 @@ export function calculateDassStressLevel(score: number): SeverityLevel {
   return 'severe';
 }
 
+export function calculatePcPtsdLevel(score: number): SeverityLevel {
+  if (score === 0) return 'minimal';
+  if (score <= 2) return 'mild';
+  if (score === 3) return 'moderate';
+  if (score === 4) return 'moderately_severe';
+  return 'severe';
+}
+
+export function calculatePcl5Level(score: number): SeverityLevel {
+  if (score <= 18) return 'minimal';
+  if (score <= 30) return 'mild';
+  if (score <= 45) return 'moderate';
+  if (score <= 59) return 'moderately_severe';
+  return 'severe';
+}
+
+export function calculateClusterLevel(score: number, maxScore: number): SeverityLevel {
+  const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
+  if (pct < 25) return 'minimal';
+  if (pct < 50) return 'mild';
+  if (pct < 70) return 'moderate';
+  if (pct < 85) return 'moderately_severe';
+  return 'severe';
+}
+
+export function calculateItqTraumaLevel(score: number): SeverityLevel {
+  if (score <= 5) return 'minimal';
+  if (score <= 10) return 'mild';
+  if (score <= 15) return 'moderate';
+  if (score <= 19) return 'moderately_severe';
+  return 'severe';
+}
+
 export function evaluateAssessment(
   answers: Record<string, number>,
   mode: AssessmentMode = 'deep',
@@ -142,6 +175,361 @@ export function evaluateAssessment(
       anxietyLevel,
       stressScore,
       stressLevel,
+      crisisFlag: false,
+      completionDate: new Date().toLocaleDateString(language === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+      answers,
+      insights,
+      recommendations,
+      birthYear,
+      isUnder18,
+      mode,
+      language,
+    };
+  }
+
+  // --- PC-PTSD-5 (Primary Care Screen, 0-5) ---
+  if (mode === 'pc_ptsd_5') {
+    let traumaScore = 0;
+    for (let i = 1; i <= 5; i++) {
+      traumaScore += answers[`pc_${i}`] ?? 0;
+    }
+
+    const traumaLevel = calculatePcPtsdLevel(traumaScore);
+    const isPositiveScreen = traumaScore >= 3;
+    const insights: string[] = [];
+    const recommendations: string[] = [];
+
+    if (language === 'uk') {
+      if ((answers['pc_1'] ?? 0) === 1) {
+        insights.push('Навʼязливі спогади та тривожні сни про травматичні або стресові події.');
+      }
+      if ((answers['pc_2'] ?? 0) === 1) {
+        insights.push('Активне уникнення розмов, людей або місць, що нагадують про пережите.');
+      }
+      if ((answers['pc_3'] ?? 0) === 1) {
+        insights.push('Стан постійної настороженості («надпильність») та здригання від звичайних звуків.');
+      }
+      if ((answers['pc_4'] ?? 0) === 1) {
+        insights.push('Емоційне оніміння, відстороненість від інших людей та втрата життєвої радості.');
+      }
+      if ((answers['pc_5'] ?? 0) === 1) {
+        insights.push('Стійке почуття провини або самозвинувачення у тому, що сталося.');
+      }
+
+      if (isPositiveScreen) {
+        recommendations.push(
+          'Результат показує позитивний скринінг (≥ 3 балів): висока ймовірність посттравматичного дистресу чи ПТСР.'
+        );
+        recommendations.push(
+          isUnder18
+            ? 'Дуже важливо не тримати цей тягар у собі. Поділіться самопочуттям з батьками або шкільним психологом.'
+            : 'Рекомендується фахова консультація психотерапевта, який працює з травмою (методи EMDR або КПТ травми / TF-CBT).'
+        );
+        recommendations.push(
+          'Ви також можете пройти повний клінічний опитувальник PCL-5 (20 питань) для детальної діагностики всіх 4 кластерів симптомів.'
+        );
+      } else {
+        recommendations.push(
+          'Результат скринінгу негативний: виражених симптомів посттравматичного стресу не виявлено.'
+        );
+        recommendations.push(
+          'Якщо окремі стресові спогади все ж викликають дискомфорт, практикуйте техніки заземлення та відновлення безпеки.'
+        );
+      }
+    } else {
+      if ((answers['pc_1'] ?? 0) === 1) {
+        insights.push('Intrusive memories and distressing dreams related to stressful experiences.');
+      }
+      if ((answers['pc_2'] ?? 0) === 1) {
+        insights.push('Efforts to avoid thoughts, places, or reminders of the stressful events.');
+      }
+      if ((answers['pc_3'] ?? 0) === 1) {
+        insights.push('Hypervigilance, feeling constantly on guard, or easily startled.');
+      }
+      if ((answers['pc_4'] ?? 0) === 1) {
+        insights.push('Emotional numbness, feeling detached from people and surroundings.');
+      }
+      if ((answers['pc_5'] ?? 0) === 1) {
+        insights.push('Persistent guilt or blaming oneself/others for what happened.');
+      }
+
+      if (isPositiveScreen) {
+        recommendations.push(
+          'Positive screen for traumatic stress (score ≥ 3): high probability of clinically significant PTSD symptoms.'
+        );
+        recommendations.push(
+          'Consultation with a trauma-informed mental health professional (EMDR or trauma-focused CBT) is recommended.'
+        );
+        recommendations.push(
+          'Consider completing the full PCL-5 assessment (20 questions) for detailed insights across all 4 symptom clusters.'
+        );
+      } else {
+        recommendations.push('Negative screen: responses fall below the clinical threshold for active PTSD.');
+        recommendations.push('Continue prioritizing restorative routines and stress-reduction strategies.');
+      }
+    }
+
+    return {
+      depressionScore: 0,
+      depressionLevel: 'minimal',
+      traumaScore,
+      traumaLevel,
+      crisisFlag: false,
+      completionDate: new Date().toLocaleDateString(language === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+      answers,
+      insights,
+      recommendations,
+      birthYear,
+      isUnder18,
+      mode,
+      language,
+    };
+  }
+
+  // --- PCL-5 (DSM-5 PTSD Checklist, 0-80) ---
+  if (mode === 'pcl5') {
+    let totalScore = 0;
+    for (let i = 1; i <= 20; i++) {
+      totalScore += answers[`pcl_${i}`] ?? 0;
+    }
+
+    // 4 DSM-5 Clusters
+    let intrusionScore = 0;
+    for (let i = 1; i <= 5; i++) intrusionScore += answers[`pcl_${i}`] ?? 0;
+
+    let avoidanceScore = 0;
+    for (let i = 6; i <= 7; i++) avoidanceScore += answers[`pcl_${i}`] ?? 0;
+
+    let moodScore = 0;
+    for (let i = 8; i <= 14; i++) moodScore += answers[`pcl_${i}`] ?? 0;
+
+    let arousalScore = 0;
+    for (let i = 15; i <= 20; i++) arousalScore += answers[`pcl_${i}`] ?? 0;
+
+    const traumaLevel = calculatePcl5Level(totalScore);
+
+    const traumaClusters = [
+      {
+        key: 'intrusion',
+        name: language === 'uk' ? 'Інтрузії (спогади)' : 'Intrusions',
+        score: intrusionScore,
+        maxScore: 20,
+        level: calculateClusterLevel(intrusionScore, 20),
+      },
+      {
+        key: 'avoidance',
+        name: language === 'uk' ? 'Уникнення тригерів' : 'Avoidance',
+        score: avoidanceScore,
+        maxScore: 8,
+        level: calculateClusterLevel(avoidanceScore, 8),
+      },
+      {
+        key: 'mood',
+        name: language === 'uk' ? 'Думки та настрій' : 'Cognition & Mood',
+        score: moodScore,
+        maxScore: 28,
+        level: calculateClusterLevel(moodScore, 28),
+      },
+      {
+        key: 'arousal',
+        name: language === 'uk' ? 'Гіперзбудження' : 'Hyperarousal',
+        score: arousalScore,
+        maxScore: 24,
+        level: calculateClusterLevel(arousalScore, 24),
+      },
+    ];
+
+    const insights: string[] = [];
+    const recommendations: string[] = [];
+
+    if (language === 'uk') {
+      if (intrusionScore >= 8) {
+        insights.push('Виражені інтрузивні спогади: флешбеки, кошмари та тривога при нагадуванні про подію.');
+      }
+      if (avoidanceScore >= 4) {
+        insights.push('Активне уникнення думок, місць, розмов або людей, повʼязаних із пережитим.');
+      }
+      if (moodScore >= 12) {
+        insights.push('Негативні зрушення в когніціях: почуття провини, відчуження від людей та втрата радості.');
+      }
+      if (arousalScore >= 10) {
+        insights.push('Нейрофізіологічне перезбудження: надпильність, спалахи роздратування та здригання.');
+      }
+
+      if (totalScore >= 33) {
+        recommendations.push(
+          'Загальний бал (≥ 33) перевищує клінічний поріг DSM-5, що вказує на ймовірну наявність ПТСР.'
+        );
+        recommendations.push(
+          isUnder18
+            ? 'Будь ласка, зверніться до дитячого чи підліткового психотерапевта або довірених дорослих для фахової допомоги.'
+            : 'Настійно рекомендується звернутися до лікаря-психотерапевта (EMDR, пролонгована експозиція, травмафокусована КПТ).'
+        );
+        recommendations.push('Скопіюйте це резюме для лікаря — воно містить детальний розподіл за всіма 4 кластерами.');
+      } else if (totalScore >= 19) {
+        recommendations.push(
+          'Помірні посттравматичні реакції. Нервова система продовжує опрацьовувати стресовий досвід.'
+        );
+        recommendations.push(
+          'Корисними будуть консультації психолога та практики соматичної стабілізації (дихальні вправи, техніки безпечного місця).'
+        );
+      } else {
+        recommendations.push('Показники перебувають у межах легкої або мінімальної реакції. ПТСР малоймовірний.');
+      }
+    } else {
+      if (intrusionScore >= 8) {
+        insights.push('Significant intrusive re-experiencing: flashbacks, disturbing nightmares, or intense reactions to reminders.');
+      }
+      if (avoidanceScore >= 4) {
+        insights.push('Strong behavioral avoidance of external and internal trauma reminders.');
+      }
+      if (moodScore >= 12) {
+        insights.push('Negative alterations in cognitions: feelings of guilt, emotional detachment, and diminished positive affect.');
+      }
+      if (arousalScore >= 10) {
+        insights.push('Marked hyperarousal: hypervigilance, irritability, and exaggerated startle response.');
+      }
+
+      if (totalScore >= 33) {
+        recommendations.push(
+          'Total score (≥ 33) exceeds the DSM-5 clinical cutoff indicating probable PTSD.'
+        );
+        recommendations.push(
+          'Evidence-based trauma therapy (EMDR, Prolonged Exposure, or Trauma-Focused CBT) is strongly advised.'
+        );
+        recommendations.push('Share this structured cluster report with your healthcare or psychological specialist.');
+      } else if (totalScore >= 19) {
+        recommendations.push('Moderate traumatic stress symptoms present. Somatic grounding and counseling support are beneficial.');
+      } else {
+        recommendations.push('Symptom levels are minimal to mild. Clinical PTSD criteria are not indicated.');
+      }
+    }
+
+    return {
+      depressionScore: 0,
+      depressionLevel: 'minimal',
+      traumaScore: totalScore,
+      traumaLevel,
+      traumaClusters,
+      crisisFlag: false,
+      completionDate: new Date().toLocaleDateString(language === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
+      answers,
+      insights,
+      recommendations,
+      birthYear,
+      isUnder18,
+      mode,
+      language,
+    };
+  }
+
+  // --- ITQ (International Trauma Questionnaire, ICD-11: PTSD & C-PTSD) ---
+  if (mode === 'itq') {
+    // PTSD Core Items (itq_1 .. itq_6)
+    let ptsdScore = 0;
+    for (let i = 1; i <= 6; i++) ptsdScore += answers[`itq_${i}`] ?? 0;
+
+    // DSO Items (itq_10 .. itq_15)
+    let dsoScore = 0;
+    for (let i = 10; i <= 15; i++) dsoScore += answers[`itq_${i}`] ?? 0;
+
+    // ICD-11 Diagnostic Logic:
+    // PTSD criteria:
+    // Re-experiencing in the here & now: itq_1 >= 2 or itq_2 >= 2
+    // Avoidance: itq_3 >= 2 or itq_4 >= 2
+    // Sense of threat: itq_5 >= 2 or itq_6 >= 2
+    // Functional impairment: itq_7 >= 2 or itq_8 >= 2 or itq_9 >= 2
+    const ptsdRe = (answers['itq_1'] ?? 0) >= 2 || (answers['itq_2'] ?? 0) >= 2;
+    const ptsdAv = (answers['itq_3'] ?? 0) >= 2 || (answers['itq_4'] ?? 0) >= 2;
+    const ptsdTh = (answers['itq_5'] ?? 0) >= 2 || (answers['itq_6'] ?? 0) >= 2;
+    const ptsdFi = (answers['itq_7'] ?? 0) >= 2 || (answers['itq_8'] ?? 0) >= 2 || (answers['itq_9'] ?? 0) >= 2;
+    const meetsPtsd = ptsdRe && ptsdAv && ptsdTh && ptsdFi;
+
+    // DSO criteria:
+    // Affective dysregulation: itq_10 >= 2 or itq_11 >= 2
+    // Negative self-concept: itq_12 >= 2 or itq_13 >= 2
+    // Disturbed relationships: itq_14 >= 2 or itq_15 >= 2
+    // Functional impairment: itq_16 >= 2 or itq_17 >= 2 or itq_18 >= 2
+    const dsoAd = (answers['itq_10'] ?? 0) >= 2 || (answers['itq_11'] ?? 0) >= 2;
+    const dsoNsc = (answers['itq_12'] ?? 0) >= 2 || (answers['itq_13'] ?? 0) >= 2;
+    const dsoDr = (answers['itq_14'] ?? 0) >= 2 || (answers['itq_15'] ?? 0) >= 2;
+    const dsoFi = (answers['itq_16'] ?? 0) >= 2 || (answers['itq_17'] ?? 0) >= 2 || (answers['itq_18'] ?? 0) >= 2;
+    const meetsDso = dsoAd && dsoNsc && dsoDr && dsoFi;
+
+    let cptsdResult: 'none' | 'ptsd' | 'cptsd' = 'none';
+    if (meetsPtsd && meetsDso) {
+      cptsdResult = 'cptsd';
+    } else if (meetsPtsd) {
+      cptsdResult = 'ptsd';
+    }
+
+    const traumaLevel = calculateItqTraumaLevel(ptsdScore);
+
+    const insights: string[] = [];
+    const recommendations: string[] = [];
+
+    if (language === 'uk') {
+      if (ptsdRe) insights.push('Навʼязливі спогади або відчуття переживання події знову тут і зараз.');
+      if (ptsdAv) insights.push('Уникнення думок, почуттів або зовнішніх тригерів, що нагадують про пережите.');
+      if (ptsdTh) insights.push('Стійке відчуття поточної загрози, надпильність та підвищена реактивність.');
+      if (dsoAd) insights.push('Порушення емоційної регуляції: тривале заспокоєння або відчуття емоційного оніміння.');
+      if (dsoNsc) insights.push('Негативний образ себе: відчуття поразки, провини або втрати власної цінності.');
+      if (dsoDr) insights.push('Труднощі у міжособистісних стосунках та відчуття відстороненості від людей.');
+
+      if (cptsdResult === 'cptsd') {
+        recommendations.push(
+          'Результати відповідають діагностичним критеріям Комплексного ПТСР (кПТСР, МКХ-11 ВООЗ).'
+        );
+        recommendations.push(
+          'кПТСР зазвичай розвивається внаслідок тривалої чи повторюваної травматизації (війна, окупація, насильство).'
+        );
+        recommendations.push(
+          'Рекомендується комплексна трифазна психотерапія: 1) стабілізація та безпека, 2) опрацювання спогадів, 3) інтеграція та відновлення звʼязків.'
+        );
+      } else if (cptsdResult === 'ptsd') {
+        recommendations.push(
+          'Результати відповідають діагностичним критеріям класичного ПТСР за МКХ-11.'
+        );
+        recommendations.push(
+          'Рекомендується фахова травматерапія (EMDR або КПТ травми) для опрацювання травматичного сліду.'
+        );
+      } else {
+        recommendations.push('Критерії клінічного ПТСР або кПТСР за МКХ-11 не досягнуті.');
+        recommendations.push('Якщо ви відчуваєте окремі складнощі зі стресом, продовжуйте підтримувати свій емоційний баланс.');
+      }
+    } else {
+      if (ptsdRe) insights.push('Re-experiencing the trauma in the here-and-now with vivid emotional activation.');
+      if (ptsdAv) insights.push('Avoidance of traumatic memories, external places, and conversations.');
+      if (ptsdTh) insights.push('Persistent sense of current threat, hypervigilance, and heightened startle.');
+      if (dsoAd) insights.push('Affective dysregulation: difficulty calming down or emotional numbing.');
+      if (dsoNsc) insights.push('Negative self-concept: deep feelings of failure, shame, or worthlessness.');
+      if (dsoDr) insights.push('Interpersonal difficulties: feeling cut off and struggling to stay close to others.');
+
+      if (cptsdResult === 'cptsd') {
+        recommendations.push(
+          'Meets diagnostic criteria for Complex PTSD (C-PTSD, WHO ICD-11).'
+        );
+        recommendations.push(
+          'C-PTSD reflects both core PTSD symptoms and disturbances in self-organization (affect, identity, relationships).'
+        );
+        recommendations.push(
+          'Multi-phase trauma-informed therapy (safety & stabilization, trauma processing, social reintegration) is recommended.'
+        );
+      } else if (cptsdResult === 'ptsd') {
+        recommendations.push('Meets diagnostic criteria for PTSD according to WHO ICD-11.');
+        recommendations.push('Evidence-based trauma interventions (EMDR, TF-CBT) are recommended.');
+      } else {
+        recommendations.push('Did not meet clinical criteria for PTSD or Complex PTSD (ICD-11).');
+      }
+    }
+
+    return {
+      depressionScore: 0,
+      depressionLevel: 'minimal',
+      traumaScore: ptsdScore,
+      traumaLevel,
+      dsoScore,
+      cptsdResult,
       crisisFlag: false,
       completionDate: new Date().toLocaleDateString(language === 'uk' ? 'uk-UA' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric' }),
       answers,

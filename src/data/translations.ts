@@ -93,6 +93,48 @@ export interface TranslationStrings {
   themeDark: string;
   startOverTooltip: string;
   setupTooltip: string;
+  // Category tabs & sections
+  sectionMood: string;
+  sectionMoodDesc: string;
+  sectionStress: string;
+  sectionStressDesc: string;
+  sectionTrauma: string;
+  sectionTraumaDesc: string;
+  categoryLabel: string;
+  allCategoriesTab: string;
+  // PTSD Assessments
+  pcPtsdTitle: string;
+  pcPtsdTime: string;
+  pcPtsdBadge: string;
+  pcPtsdDesc: string;
+  pcl5Title: string;
+  pcl5Time: string;
+  pcl5Badge: string;
+  pcl5Desc: string;
+  itqTitle: string;
+  itqTime: string;
+  itqBadge: string;
+  itqDesc: string;
+  // Trauma Results & Clusters
+  traumaTitle: string;
+  clusterIntrusion: string;
+  clusterAvoidance: string;
+  clusterMood: string;
+  clusterArousal: string;
+  itqPtsdScoreTitle: string;
+  itqDsoScoreTitle: string;
+  cptsdNone: string;
+  cptsdPtsd: string;
+  cptsdComplex: string;
+  upgradeToPclTitle: string;
+  upgradeToPclDesc: string;
+  upgradeToPclBtn: string;
+  positiveScreen: string;
+  negativeScreen: string;
+  screenPositiveDesc: string;
+  screenNegativeDesc: string;
+  cutoffThresholdLabel: string;
+  clustersBreakdownTitle: string;
 }
 
 export const translations: Record<Language, TranslationStrings> = {
@@ -189,6 +231,45 @@ export const translations: Record<Language, TranslationStrings> = {
     themeDark: 'Нічний режим',
     startOverTooltip: 'Повернутися на початок',
     setupTooltip: 'Налаштування тестування',
+    sectionMood: 'Настрій та емоції',
+    sectionMoodDesc: 'Скринінг депресивних станів, тривожності та життєвого тонусу',
+    sectionStress: 'Стрес і вигорання',
+    sectionStressDesc: 'Баланс хронічного перевантаження, тривоги та виснаження (DASS-21)',
+    sectionTrauma: 'Травма та ПТСР',
+    sectionTraumaDesc: 'Оцінка наслідків стресових подій, військового досвіду та комплексного ПТСР',
+    categoryLabel: 'Категорія',
+    allCategoriesTab: 'Всі тести',
+    pcPtsdTitle: '⚡ PC-PTSD-5 (Швидкий скринінг)',
+    pcPtsdTime: '1–2 хвилини • 5 питань',
+    pcPtsdBadge: '⚡ 5 питань (2 хв)',
+    pcPtsdDesc: 'Короткий клінічний експрес-скринінг первинної ланки (VA/DoD). Швидко визначає наявність ознак посттравматичного дистресу.',
+    pcl5Title: '🔬 PCL-5 (Клінічний стандарт ПТСР)',
+    pcl5Time: '8–12 хвилин • 20 питань',
+    pcl5Badge: '🔬 20 питань (10 хв)',
+    pcl5Desc: 'Золотий стандарт DSM-5. Детально аналізує 4 групи симптомів: навʼязливі спогади (інтрузії), уникнення тригерів, негативні зміни в думках/настрої та гіперзбудження.',
+    itqTitle: '🌐 ITQ (МКХ-11: ПТСР та кПТСР)',
+    itqTime: '7–10 хвилин • 18 питань',
+    itqBadge: '🌐 18 питань (8 хв)',
+    itqDesc: 'Міжнародний опитувальник травми за МКХ-11 ВООЗ. Діагностує як класичний ПТСР, так і Комплексний ПТСР (кПТСР) внаслідок тривалої хронічної травматизації.',
+    traumaTitle: 'Скринінг травматичного стресу та ПТСР',
+    clusterIntrusion: 'Навʼязливі спогади (Інтрузії)',
+    clusterAvoidance: 'Уникнення тригерів',
+    clusterMood: 'Негативні зміни думок і настрою',
+    clusterArousal: 'Гіперзбудження та пильність',
+    itqPtsdScoreTitle: 'Симптоми ПТСР (спогади, уникнення, загроза)',
+    itqDsoScoreTitle: 'Порушення самоорганізації (DSO: емоції, самооцінка, стосунки)',
+    cptsdNone: 'Ознак ПТСР або Комплексного ПТСР не виявлено',
+    cptsdPtsd: 'Відповідає діагностичним критеріям ПТСР (МКХ-11)',
+    cptsdComplex: 'Відповідає критеріям Комплексного ПТСР (кПТСР, МКХ-11)',
+    upgradeToPclTitle: 'Бажаєте пройти поглиблену оцінку симптомів (PCL-5)?',
+    upgradeToPclDesc: 'Ваш експрес-скринінг показав помітні реакції на травматичний стрес. Для детального розбору всіх 4 кластерів симптомів ви можете пройти повну клінічну шкалу PCL-5 (20 питань).',
+    upgradeToPclBtn: '🔬 Пройти повну шкалу PCL-5 (20 питань)',
+    positiveScreen: 'Позитивний скринінг (ймовірний ПТСР)',
+    negativeScreen: 'Негативний скринінг',
+    screenPositiveDesc: 'Результат (≥ 3 балів) вказує на клінічно значущі ознаки травматичного дистресу. Рекомендовано детальне обстеження (наприклад, шкалу PCL-5) та консультацію фахівця.',
+    screenNegativeDesc: 'Кількість симптомів нижче клінічного порогу (3 бали). Ознак гострого посттравматичного дистресу не виявлено.',
+    cutoffThresholdLabel: 'Клінічний поріг (DSM-5: 33 бали)',
+    clustersBreakdownTitle: 'Розподіл симптомів за кластерами DSM-5',
   },
   en: {
     title: 'MindCheck',
@@ -283,6 +364,45 @@ export const translations: Record<Language, TranslationStrings> = {
     themeDark: 'Dark mode',
     startOverTooltip: 'Start over',
     setupTooltip: 'Assessment settings',
+    sectionMood: 'Mood & Affect',
+    sectionMoodDesc: 'Depression, generalized anxiety, and emotional vitality screening',
+    sectionStress: 'Stress & Burnout',
+    sectionStressDesc: 'Balance of chronic stress, anxiety, and exhaustion triad (DASS-21)',
+    sectionTrauma: 'Trauma & PTSD',
+    sectionTraumaDesc: 'Screening for war experiences, traumatic stress, PTSD & Complex PTSD',
+    categoryLabel: 'Category',
+    allCategoriesTab: 'All Assessments',
+    pcPtsdTitle: '⚡ PC-PTSD-5 (Primary Care Screen)',
+    pcPtsdTime: '1–2 mins • 5 questions',
+    pcPtsdBadge: '⚡ 5 questions (2 min)',
+    pcPtsdDesc: 'Quick primary care screening tool (VA/DoD). Rapidly identifies active post-traumatic stress responses.',
+    pcl5Title: '🔬 PCL-5 (PTSD Clinical Standard)',
+    pcl5Time: '8–12 mins • 20 questions',
+    pcl5Badge: '🔬 20 questions (10 min)',
+    pcl5Desc: 'Gold standard DSM-5 PTSD checklist. Thoroughly measures 4 symptom clusters: intrusions, avoidance, mood/cognition alterations, and hyperarousal.',
+    itqTitle: '🌐 ITQ (ICD-11: PTSD & Complex PTSD)',
+    itqTime: '7–10 mins • 18 questions',
+    itqBadge: '🌐 18 questions (8 min)',
+    itqDesc: 'International Trauma Questionnaire (WHO ICD-11). Differentiates between classic PTSD and Complex PTSD (C-PTSD) from chronic trauma.',
+    traumaTitle: 'Traumatic Stress & PTSD Screening',
+    clusterIntrusion: 'Intrusions (Re-experiencing)',
+    clusterAvoidance: 'Avoidance of Reminders',
+    clusterMood: 'Negative Alterations in Cognitions & Mood',
+    clusterArousal: 'Hyperarousal & Reactivity',
+    itqPtsdScoreTitle: 'PTSD Core Symptoms (re-experiencing, avoidance, threat)',
+    itqDsoScoreTitle: 'Disturbances in Self-Organization (DSO: affect, self-worth, relations)',
+    cptsdNone: 'No clinical criteria met for PTSD or Complex PTSD',
+    cptsdPtsd: 'Meets diagnostic criteria for PTSD (WHO ICD-11)',
+    cptsdComplex: 'Meets diagnostic criteria for Complex PTSD (C-PTSD, WHO ICD-11)',
+    upgradeToPclTitle: 'Would you like a deeper trauma assessment (PCL-5)?',
+    upgradeToPclDesc: 'Your screening indicates notable traumatic stress responses. For a comprehensive analysis across all 4 symptom clusters, you can take the full clinical PCL-5 assessment (20 questions).',
+    upgradeToPclBtn: '🔬 Take full PCL-5 assessment (20 questions)',
+    positiveScreen: 'Positive Screen (Probable PTSD)',
+    negativeScreen: 'Negative Screen',
+    screenPositiveDesc: 'Score (≥ 3 points) indicates clinically significant signs of post-traumatic distress. Further evaluation (such as PCL-5) and specialist consultation are recommended.',
+    screenNegativeDesc: 'Symptom count is below the clinical cutoff (3 points). No signs of acute post-traumatic distress detected.',
+    cutoffThresholdLabel: 'Clinical cutoff (DSM-5: 33 points)',
+    clustersBreakdownTitle: 'Symptom Breakdown by DSM-5 Clusters',
   },
   es: {
     title: 'MindCheck',
@@ -377,6 +497,45 @@ export const translations: Record<Language, TranslationStrings> = {
     themeDark: 'Modo oscuro',
     startOverTooltip: 'Volver al inicio',
     setupTooltip: 'Configuración de la prueba',
+    sectionMood: 'Ánimo y afecto',
+    sectionMoodDesc: 'Cribado de depresión, ansiedad generalizada y vitalidad emocional',
+    sectionStress: 'Estrés y agotamiento',
+    sectionStressDesc: 'Balance de sobrecarga crónica, tensión y fatiga nerviosa (DASS-21)',
+    sectionTrauma: 'Trauma y TEPT',
+    sectionTraumaDesc: 'Evaluación de experiencias traumáticas, estrés de guerra y TEPT complejo',
+    categoryLabel: 'Categoría',
+    allCategoriesTab: 'Todas las pruebas',
+    pcPtsdTitle: '⚡ PC-PTSD-5 (Cribado rápido)',
+    pcPtsdTime: '1–2 minutos • 5 preguntas',
+    pcPtsdBadge: '⚡ 5 preguntas (2 min)',
+    pcPtsdDesc: 'Cribado rápido de atención primaria (VA/DoD). Identifica de forma inmediata la presencia de estrés postraumático.',
+    pcl5Title: '🔬 PCL-5 (Estándar clínico TEPT)',
+    pcl5Time: '8–12 minutos • 20 preguntas',
+    pcl5Badge: '🔬 20 preguntas (10 min)',
+    pcl5Desc: 'Estándar clínico del DSM-5. Evalúa en detalle los 4 grupos de síntomas: intrusiones, evitación, cambios negativos en cognición/ánimo e hiperactivación.',
+    itqTitle: '🌐 ITQ (CIE-11: TEPT y TEPT Complejo)',
+    itqTime: '7–10 minutos • 18 preguntas',
+    itqBadge: '🌐 18 preguntas (8 min)',
+    itqDesc: 'Cuestionario Internacional de Trauma (CIE-11 OMS). Distingue entre el TEPT clásico y el TEPT Complejo por trauma prolongado.',
+    traumaTitle: 'Cribado de estrés traumático y TEPT',
+    clusterIntrusion: 'Intrusiones (Reviviscencia)',
+    clusterAvoidance: 'Evitación de recordatorios',
+    clusterMood: 'Alteraciones cognitivas y del estado de ánimo',
+    clusterArousal: 'Hiperactivación y alerta',
+    itqPtsdScoreTitle: 'Síntomas principales de TEPT (recuerdos, evitación, amenaza)',
+    itqDsoScoreTitle: 'Alteraciones de la autoorganización (DSO: afecto, autoestima, relaciones)',
+    cptsdNone: 'No se cumplen criterios clínicos de TEPT ni TEPT Complejo',
+    cptsdPtsd: 'Cumple con los criterios diagnósticos de TEPT (CIE-11 OMS)',
+    cptsdComplex: 'Cumple con los criterios de TEPT Complejo (CIE-11 OMS)',
+    upgradeToPclTitle: '¿Desea una evaluación más profunda (PCL-5)?',
+    upgradeToPclDesc: 'Su cribado inicial indica signos de estrés postraumático. Para un desglose exhaustivo de los 4 grupos de síntomas, puede completar la escala clínica completa PCL-5 (20 preguntas).',
+    upgradeToPclBtn: '🔬 Realizar evaluación completa PCL-5 (20 preguntas)',
+    positiveScreen: 'Detección Positiva (Probable TEPT)',
+    negativeScreen: 'Detección Negativa',
+    screenPositiveDesc: 'El puntaje (≥ 3 puntos) indica signos clínicamente significativos de distrés postraumático. Se recomienda una evaluación más detallada (como PCL-5) y consulta con un especialista.',
+    screenNegativeDesc: 'La cantidad de síntomas está por debajo del umbral clínico (3 puntos). No se detectaron signos de distrés postraumático agudo.',
+    cutoffThresholdLabel: 'Umbral clínico (DSM-5: 33 puntos)',
+    clustersBreakdownTitle: 'Distribución de síntomas por grupos del DSM-5',
   },
   pt: {
     title: 'MindCheck',
@@ -471,5 +630,44 @@ export const translations: Record<Language, TranslationStrings> = {
     themeDark: 'Modo escuro',
     startOverTooltip: 'Voltar ao início',
     setupTooltip: 'Definições da avaliação',
+    sectionMood: 'Humor e emoções',
+    sectionMoodDesc: 'Rastreio de depressão, ansiedade generalizada e vitalidade emocional',
+    sectionStress: 'Stress e esgotamento',
+    sectionStressDesc: 'Equilíbrio de sobrecarga crónica, ansiedade e exaustão nervosa (DASS-21)',
+    sectionTrauma: 'Trauma e PTSR',
+    sectionTraumaDesc: 'Avaliação de experiências traumáticas, stress de guerra e PTSR complexo',
+    categoryLabel: 'Categoria',
+    allCategoriesTab: 'Todas as avaliações',
+    pcPtsdTitle: '⚡ PC-PTSD-5 (Rastreio rápido)',
+    pcPtsdTime: '1–2 minutos • 5 perguntas',
+    pcPtsdBadge: '⚡ 5 perguntas (2 min)',
+    pcPtsdDesc: 'Rastreio rápido de cuidados primários (VA/DoD). Identifica de forma expedita a presença de stress pós-traumático.',
+    pcl5Title: '🔬 PCL-5 (Padrão clínico PTSR)',
+    pcl5Time: '8–12 minutos • 20 perguntas',
+    pcl5Badge: '🔬 20 perguntas (10 min)',
+    pcl5Desc: 'Padrão clínico DSM-5. Avalia minuciosamente os 4 grupos de sintomas: intrusões, evitamento, alterações cognitivas/humor e hiperativação.',
+    itqTitle: '🌐 ITQ (CID-11: PTSR e PTSR Complexo)',
+    itqTime: '7–10 minutos • 18 perguntas',
+    itqBadge: '🌐 18 perguntas (8 min)',
+    itqDesc: 'Questionário Internacional de Trauma (CID-11 OMS). Distingue entre o PTSR clássico e o PTSR Complexo por trauma crónico.',
+    traumaTitle: 'Rastreio de stress traumático e PTSR',
+    clusterIntrusion: 'Intrusões (Revivência)',
+    clusterAvoidance: 'Evitamento de gatilhos',
+    clusterMood: 'Alterações cognitivas e do humor',
+    clusterArousal: 'Hiperativação e reatividade',
+    itqPtsdScoreTitle: 'Sintomas principais de PTSR (memórias, evitamento, ameaça)',
+    itqDsoScoreTitle: 'Perturbações da auto-organização (DSO: afeto, autoestima, relações)',
+    cptsdNone: 'Não foram preenchidos critérios para PTSR nem PTSR Complexo',
+    cptsdPtsd: 'Cumpre critérios de diagnóstico de PTSR (CID-11 OMS)',
+    cptsdComplex: 'Cumpre critérios de diagnóstico de PTSR Complexo (CID-11 OMS)',
+    upgradeToPclTitle: 'Deseja uma avaliação mais aprofundada (PCL-5)?',
+    upgradeToPclDesc: 'O seu rastreio inicial indica sinais de stress pós-traumático. Para uma análise detalhada dos 4 grupos de sintomas, pode completar a escala clínica PCL-5 (20 perguntas).',
+    upgradeToPclBtn: '🔬 Realizar avaliação completa PCL-5 (20 perguntas)',
+    positiveScreen: 'Triagem Positiva (Provável TEPT)',
+    negativeScreen: 'Triagem Negativa',
+    screenPositiveDesc: 'A pontuação (≥ 3 pontos) indica sinais clinicamente significativos de estresse pós-traumático. Recomenda-se avaliação detalhada (como PCL-5) e consulta com especialista.',
+    screenNegativeDesc: 'A contagem de sintomas está abaixo do limiar clínico (3 pontos). Não foram detectados sinais de estresse pós-traumático agudo.',
+    cutoffThresholdLabel: 'Limiar clínico (DSM-5: 33 pontos)',
+    clustersBreakdownTitle: 'Distribuição de sintomas por grupos do DSM-5',
   }
 };

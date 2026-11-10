@@ -26,6 +26,22 @@ export const crisisContacts: Record<string, CrisisContact[]> = {
     },
     {
       country: 'UA',
+      name: 'Гаряча лінія Українського ветеранського фонду',
+      phone: '0 800 33 20 29',
+      description: 'Кризова підтримка для ветеранів, військовослужбовців та їхніх родин (24/7, безкоштовно)',
+      isYouthSpecific: false,
+      isTraumaSpecific: true,
+    },
+    {
+      country: 'UA',
+      name: 'Лінія психологічної допомоги НПА',
+      phone: '0 800 100 102',
+      description: 'Безкоштовна фахова психологічна допомога для постраждалих від війни (щодня 10:00–20:00)',
+      isYouthSpecific: false,
+      isTraumaSpecific: true,
+    },
+    {
+      country: 'UA',
       name: 'Гаряча лінія психологічної підтримки',
       phone: '0 800 211 444',
       description: 'Безкоштовна кваліфікована допомога фахівців (щодня з 9:00 до 18:00)',
