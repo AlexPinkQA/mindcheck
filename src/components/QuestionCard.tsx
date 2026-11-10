@@ -100,14 +100,14 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
       {/* Question Header */}
       <div className="mb-7 text-center sm:text-left">
-        <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-snug tracking-tight">
-          {question.text}
-        </h2>
         {question.subtext && (
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-2 font-semibold leading-relaxed">
             {question.subtext}
           </p>
         )}
+        <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-snug tracking-tight">
+          {question.text}
+        </h2>
       </div>
 
       {/* Modern High-Contrast Options Stack */}
