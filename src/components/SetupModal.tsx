@@ -56,7 +56,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
       setActiveStep(initialStep);
       setSelectedCategory(getCategoryForMode(mode));
     }
-  }, [isOpen, initialStep, mode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialStep]);
 
   if (!isOpen) return null;
 

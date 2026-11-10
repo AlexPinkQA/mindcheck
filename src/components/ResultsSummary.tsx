@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AssessmentResult, SeverityLevel } from '../types/assessment';
-import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check, Sparkles, ArrowRight, ShieldCheck, ShieldAlert, Layers, Info } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check, Sparkles, ArrowRight, ShieldCheck, ShieldAlert, Layers, Info, HeartHandshake, Phone } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 interface ResultsSummaryProps {
@@ -227,6 +227,10 @@ ${t.selectedFormat}: ${modeBadge.label}
       ? Math.min(100, Math.round(((result.traumaScore ?? 0) / 80) * 100))
       : Math.min(100, Math.round(((result.traumaScore ?? 0) / 24) * 100));
   const dsoPercent = result.dsoScore !== undefined ? Math.min(100, Math.round((result.dsoScore / 24) * 100)) : 0;
+  const isTraumaCutoffExceeded =
+    (result.mode === 'pc_ptsd_5' && (result.traumaScore ?? 0) >= 3) ||
+    (result.mode === 'pcl5' && (result.traumaScore ?? 0) >= 33) ||
+    (result.mode === 'itq' && (result.cptsdResult === 'ptsd' || result.cptsdResult === 'cptsd'));
 
   return (
     <div className="space-y-6 animate-fade-in pb-12">
@@ -708,6 +712,46 @@ ${t.selectedFormat}: ${modeBadge.label}
                 <Heart className="w-4 h-4" />
                 {t.crisisAlertLink}
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Trauma Cutoff Exceeded - Specialized Trauma & PTSD Support Banner */}
+        {isTraumaCutoffExceeded && (
+          <div className="p-5 sm:p-6 rounded-3xl bg-amber-50/90 dark:bg-amber-950/40 border-2 border-amber-200/90 dark:border-amber-800/80 space-y-3.5 animate-fade-in">
+            <div className="flex items-start gap-3.5">
+              <div className="p-2 rounded-2xl bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 shrink-0 mt-0.5">
+                <HeartHandshake className="w-5 h-5" />
+              </div>
+              <div className="space-y-1 flex-1">
+                <span className="font-extrabold text-amber-950 dark:text-amber-200 text-sm sm:text-base leading-snug block">
+                  {t.traumaSupportTitle}
+                </span>
+                <p className="text-xs sm:text-sm text-amber-900/90 dark:text-amber-200/80 leading-relaxed">
+                  {t.traumaSupportDesc}
+                </p>
+              </div>
+            </div>
+
+            {/* Support Actions: View Hotlines / Direct Dial */}
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={onCrisisClick}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 dark:bg-amber-500 dark:hover:bg-amber-600 text-white text-xs sm:text-sm font-bold shadow-xs transition active:scale-95 cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>{t.traumaSupportBtn}</span>
+              </button>
+              {language === 'uk' && (
+                <a
+                  href="tel:0800100102"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-900 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700 text-xs sm:text-sm font-bold hover:bg-amber-100/50 dark:hover:bg-slate-800 transition active:scale-95"
+                >
+                  <Phone className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  <span>0 800 100 102 (НПА, щодня 10:00–20:00)</span>
+                </a>
+              )}
             </div>
           </div>
         )}

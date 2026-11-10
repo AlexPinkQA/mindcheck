@@ -668,6 +668,7 @@ export default function App() {
         onClose={() => setIsCrisisModalOpen(false)}
         language={language}
         isUnder18={isUnder18}
+        isTraumaContext={mode === 'pc_ptsd_5' || mode === 'pcl5' || mode === 'itq'}
       />
     </div>
   );

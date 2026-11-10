@@ -8,6 +8,7 @@ interface CrisisModalProps {
   onClose: () => void;
   language: Language;
   isUnder18?: boolean;
+  isTraumaContext?: boolean;
 }
 
 export const CrisisModal: React.FC<CrisisModalProps> = ({
@@ -15,14 +16,19 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({
   onClose,
   language,
   isUnder18 = false,
+  isTraumaContext = false,
 }) => {
   if (!isOpen) return null;
 
   const t = translations[language];
   const contactsList = crisisContacts['UA']; // Default country contacts
 
-  // If under 18, sort youth-specific contacts to the top
+  // Sort contacts: prioritize trauma-specific if trauma context, youth-specific if under 18
   const sortedContacts = [...contactsList].sort((a, b) => {
+    if (isTraumaContext) {
+      if (a.isTraumaSpecific && !b.isTraumaSpecific) return -1;
+      if (!a.isTraumaSpecific && b.isTraumaSpecific) return 1;
+    }
     if (isUnder18) {
       if (a.isYouthSpecific && !b.isYouthSpecific) return -1;
       if (!a.isYouthSpecific && b.isYouthSpecific) return 1;
@@ -74,11 +80,18 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({
                     <span className="font-bold text-sm text-slate-900 dark:text-white">{c.name}</span>
                     <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{c.description}</p>
                   </div>
-                  {c.isYouthSpecific && (
-                    <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 bg-teal-600 dark:bg-teal-500 text-white rounded-full whitespace-nowrap">
-                      {t.crisisYouthTag}
-                    </span>
-                  )}
+                  <div className="flex flex-col items-end gap-1">
+                    {c.isTraumaSpecific && (
+                      <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 bg-amber-600 dark:bg-amber-500 text-white rounded-full whitespace-nowrap">
+                        {t.crisisTraumaTag}
+                      </span>
+                    )}
+                    {c.isYouthSpecific && (
+                      <span className="text-[10px] font-bold tracking-wide uppercase px-2 py-0.5 bg-teal-600 dark:bg-teal-500 text-white rounded-full whitespace-nowrap">
+                        {t.crisisYouthTag}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2">

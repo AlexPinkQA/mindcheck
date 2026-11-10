@@ -39,6 +39,10 @@ export interface TranslationStrings {
   crisisAlertTitle: string;
   crisisAlertDesc: string;
   crisisAlertLink: string;
+  crisisTraumaTag: string;
+  traumaSupportTitle: string;
+  traumaSupportDesc: string;
+  traumaSupportBtn: string;
   insightsTitle: string;
   recommendationsTitle: string;
   copyDoctorReport: string;
@@ -182,6 +186,10 @@ export const translations: Record<Language, TranslationStrings> = {
     crisisAlertTitle: 'Важливий сигнал підтримки',
     crisisAlertDesc: 'У ваших відповідях зафіксовано думки про важкість життя або самопошкодження. Ви не мусите нести цей тягар самотужки.',
     crisisAlertLink: 'Отримати безкоштовну анонімну підтримку (лінії довіри / чати)',
+    crisisTraumaTag: 'Травма / Військовий стрес',
+    traumaSupportTitle: 'Підтримка при травматичному стресі та ПТСР',
+    traumaSupportDesc: 'Ваші показники перевищують клінічний поріг і вказують на суттєвий вплив пережитого стресового досвіду на нервову систему. Фахова підтримка (травматерапія EMDR, КПТ) допомагає ефективно опрацювати ці реакції. Ви можете звернутися до спеціалізованих ліній допомоги.',
+    traumaSupportBtn: 'Контакти ліній психологічної підтримки',
     insightsTitle: 'Що вплинуло на ваші показники',
     recommendationsTitle: 'Рекомендовані кроки підтримки',
     copyDoctorReport: 'Скопіювати звіт для лікаря',
@@ -320,6 +328,10 @@ export const translations: Record<Language, TranslationStrings> = {
     crisisAlertTitle: 'Important Support Signal',
     crisisAlertDesc: 'Your responses indicate thoughts of severe distress or self-harm. Free, compassionate help is available.',
     crisisAlertLink: 'Get free confidential crisis support',
+    crisisTraumaTag: 'Trauma / War Stress',
+    traumaSupportTitle: 'Trauma & PTSD Support Resources',
+    traumaSupportDesc: 'Your responses exceed the clinical cutoff, indicating significant post-traumatic distress. Specialized trauma therapy (EMDR, CPT, TF-CBT) is highly effective in processing these symptoms. You can connect with dedicated confidential support hotlines.',
+    traumaSupportBtn: 'View Crisis & Support Contacts',
     insightsTitle: 'Factors influencing your score',
     recommendationsTitle: 'Recommended Next Steps',
     copyDoctorReport: 'Copy Summary for Doctor',
@@ -458,6 +470,10 @@ export const translations: Record<Language, TranslationStrings> = {
     crisisAlertTitle: 'Señal de apoyo importante',
     crisisAlertDesc: 'Sus respuestas indican pensamientos de malestar grave o autolesión. Hay ayuda compasiva disponible.',
     crisisAlertLink: 'Obtener apoyo de crisis confidencial y gratuito',
+    crisisTraumaTag: 'Trauma / Estrés postraumático',
+    traumaSupportTitle: 'Recursos de apoyo para trauma y TEPT',
+    traumaSupportDesc: 'Su puntuación supera el umbral clínico e indica un impacto postraumático notable. La terapia especializada en trauma (EMDR, TCC) ayuda a procesar estas reacciones. Puede acceder a líneas de apoyo confidenciales y gratuitas.',
+    traumaSupportBtn: 'Ver contactos de apoyo y crisis',
     insightsTitle: 'Factores que influyeron en su resultado',
     recommendationsTitle: 'Pasos recomendados',
     copyDoctorReport: 'Copiar informe para el médico',
@@ -596,6 +612,10 @@ export const translations: Record<Language, TranslationStrings> = {
     crisisAlertTitle: 'Sinal de apoio importante',
     crisisAlertDesc: 'As suas respostas indicam sofrimento agudo ou pensamentos de autolesão.',
     crisisAlertLink: 'Obter apoio confidencial e gratuito',
+    crisisTraumaTag: 'Trauma / Stress pós-traumático',
+    traumaSupportTitle: 'Recursos de apoio para trauma e PTSR',
+    traumaSupportDesc: 'A sua pontuação ultrapassa o limiar clínico, indicando um impacto pós-traumático significativo. A terapia especializada em trauma (EMDR, TCC) é eficaz no processamento destes sintomas. Pode aceder a linhas de apoio gratuitas e confidenciais.',
+    traumaSupportBtn: 'Ver contactos de apoio e crise',
     insightsTitle: 'O que influenciou os seus resultados',
     recommendationsTitle: 'Passos recomendados',
     copyDoctorReport: 'Copiar relatório para o médico',

@@ -38,11 +38,8 @@ export const Header: React.FC<HeaderProps> = ({
           className="flex items-center gap-3 text-left group transition cursor-pointer select-none"
           title={t.startOverTooltip}
         >
-          <div className="relative">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-teal-600/20 group-hover:scale-105 group-hover:shadow-teal-600/30 transition-all duration-300">
-              M
-            </div>
-            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full ring-2 ring-white dark:ring-slate-950" />
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-500 via-teal-600 to-cyan-600 flex items-center justify-center text-white font-black text-xl shadow-md shadow-teal-600/20 group-hover:scale-105 group-hover:shadow-teal-600/30 transition-all duration-300">
+            M
           </div>
           <div>
             <div className="flex items-center gap-2">
