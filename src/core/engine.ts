@@ -678,15 +678,18 @@ export function evaluateAssessment(
   };
 }
 
-const STORAGE_KEY = 'mindcheck_assessment_draft';
-
-export function saveDraft(data: {
+export interface DraftData {
   answers: Record<string, number>;
   currentStep: number;
   mode: AssessmentMode;
   language: Language;
   birthYear?: number;
-}) {
+  stage?: 'welcome' | 'assessment' | 'result';
+}
+
+const STORAGE_KEY = 'mindcheck_assessment_draft';
+
+export function saveDraft(data: DraftData) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...data, updatedAt: Date.now() }));
   } catch (e) {
@@ -694,13 +697,7 @@ export function saveDraft(data: {
   }
 }
 
-export function loadDraft(): {
-  answers: Record<string, number>;
-  currentStep: number;
-  mode: AssessmentMode;
-  language: Language;
-  birthYear?: number;
-} | null {
+export function loadDraft(): DraftData | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;

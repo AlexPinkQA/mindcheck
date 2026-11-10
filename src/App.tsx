@@ -65,10 +65,23 @@ export default function App() {
     if (draft && Object.keys(draft.answers).length > 0) {
       setAnswers(draft.answers);
       setCurrentStep(draft.currentStep || 0);
-      setMode(draft.mode || 'express');
-      setLanguage(draft.language || 'uk');
+      const draftMode = draft.mode || 'express';
+      const draftLang = draft.language || 'uk';
+      setMode(draftMode);
+      setLanguage(draftLang);
       setBirthYear(draft.birthYear);
-      setStage('assessment');
+
+      // Check if all questions for this mode have been answered or draft explicitly says 'result'
+      const questionsForMode = getQuestions(draftMode, draftLang);
+      const allAnswered =
+        questionsForMode.length > 0 &&
+        questionsForMode.every((q) => draft.answers[q.id] !== undefined);
+
+      if (draft.stage === 'result' || allAnswered) {
+        setStage('result');
+      } else {
+        setStage('assessment');
+      }
     } else if (!onboardingDone) {
       setIsOnboarding(true);
       setSetupInitialStep('language');
@@ -116,6 +129,7 @@ export default function App() {
       mode: 'deep',
       language,
       birthYear,
+      stage: 'assessment',
     });
   };
 
@@ -150,13 +164,6 @@ export default function App() {
     if (!currentQuestion) return;
     const updated = { ...answers, [currentQuestion.id]: value };
     setAnswers(updated);
-    saveDraft({
-      answers: updated,
-      currentStep,
-      mode,
-      language,
-      birthYear,
-    });
 
     // Immediate crisis safety trigger if suicidality item > 0
     if (currentQuestion.isCrisisTrigger && value > 0) {
@@ -172,9 +179,18 @@ export default function App() {
         mode,
         language,
         birthYear,
+        stage: 'assessment',
       });
     } else {
       setStage('result');
+      saveDraft({
+        answers: updated,
+        currentStep,
+        mode,
+        language,
+        birthYear,
+        stage: 'result',
+      });
     }
   };
 
@@ -188,6 +204,7 @@ export default function App() {
         mode,
         language,
         birthYear,
+        stage: 'assessment',
       });
     } else {
       setIsConfirmRestartModalOpen(true);
@@ -647,9 +664,19 @@ export default function App() {
         isOpen={isSetupModalOpen}
         onClose={() => setIsSetupModalOpen(false)}
         language={language}
-        onSelectLanguage={(l) => setLanguage(l)}
+        onSelectLanguage={(l) => {
+          setLanguage(l);
+          if (Object.keys(answers).length > 0) {
+            saveDraft({ answers, currentStep, mode, language: l, birthYear, stage });
+          }
+        }}
         birthYear={birthYear}
-        onSelectBirthYear={(y) => setBirthYear(y)}
+        onSelectBirthYear={(y) => {
+          setBirthYear(y);
+          if (Object.keys(answers).length > 0) {
+            saveDraft({ answers, currentStep, mode, language, birthYear: y, stage });
+          }
+        }}
         mode={mode}
         onSelectMode={(m) => setMode(m)}
         onStartAssessment={handleStartAssessment}
