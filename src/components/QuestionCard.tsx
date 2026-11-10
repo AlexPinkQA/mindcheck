@@ -43,6 +43,12 @@ const categoryLabels: Record<string, Record<Language, string>> = {
     es: 'Seguridad y apoyo emocional',
     pt: 'Segurança e apoio emocional',
   },
+  trauma: {
+    uk: 'Травматичний стрес та ПТСР',
+    en: 'Traumatic Stress & PTSD',
+    es: 'Estrés traumático y TEPT',
+    pt: 'Stress traumático e PTSR',
+  },
 };
 
 const dassCategoryLabels: Record<string, Record<Language, string>> = {

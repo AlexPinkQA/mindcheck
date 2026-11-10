@@ -120,8 +120,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              <Globe className="w-3.5 h-3.5" />
-              <span className="truncate">{t.stepLanguage}</span>
+              <Globe className="w-3.5 h-3.5 shrink-0" />
+              <span className="whitespace-nowrap">{t.stepLanguage}</span>
             </button>
 
             <button
@@ -140,8 +140,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              <Calendar className="w-3.5 h-3.5" />
-              <span className="truncate">{t.stepAge}</span>
+              <Calendar className="w-3.5 h-3.5 shrink-0" />
+              <span className="whitespace-nowrap">{t.stepAge}</span>
             </button>
 
             <button
@@ -162,8 +162,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
               }`}
             >
-              <Zap className="w-3.5 h-3.5" />
-              <span className="truncate">{t.stepMode}</span>
+              <Zap className="w-3.5 h-3.5 shrink-0" />
+              <span className="whitespace-nowrap">{t.stepMode}</span>
             </button>
           </div>
         </div>
@@ -293,7 +293,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   }`}
                 >
                   <span>🌧️</span>
-                  <span className="truncate">{t.sectionMood}</span>
+                  <span className="whitespace-nowrap">{t.sectionMood}</span>
                 </button>
                 <button
                   type="button"
@@ -308,7 +308,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   }`}
                 >
                   <span>⚖️</span>
-                  <span className="truncate">{t.sectionStress}</span>
+                  <span className="whitespace-nowrap">{t.sectionStress}</span>
                 </button>
                 <button
                   type="button"
@@ -323,7 +323,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                   }`}
                 >
                   <span>🛡️</span>
-                  <span className="truncate">{t.sectionTrauma}</span>
+                  <span className="whitespace-nowrap">{t.sectionTrauma}</span>
                 </button>
               </div>
 

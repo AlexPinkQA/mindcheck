@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="MindCheck — конфіденційний клінічний скринінг психоемоційного стану без передачі даних на сервер." />
     <title>MindCheck — Оцінка психоемоційного стану</title>
   </head>
-  <body class="bg-slate-50 text-slate-900 antialiased selection:bg-teal-100 selection:text-teal-900">
-    <div id="root"></div>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-teal-500 selection:text-white min-h-[100dvh]">
+    <div id="root" class="min-h-[100dvh] flex flex-col"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -38,9 +38,9 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-fade-in">
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-rose-100 dark:border-rose-950/60 overflow-hidden text-slate-900 dark:text-slate-100">
+      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-rose-100 dark:border-rose-950/60 overflow-hidden text-slate-900 dark:text-slate-100 max-h-[90vh] flex flex-col">
         {/* Top banner */}
-        <div className="bg-rose-600 dark:bg-rose-700 px-6 py-5 text-white flex items-center justify-between">
+        <div className="bg-rose-600 dark:bg-rose-700 px-6 py-5 text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-xl">
               <HeartHandshake className="w-6 h-6" />
@@ -52,7 +52,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
+            className="p-1.5 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition cursor-pointer"
             aria-label={t.closeBtn}
           >
             <X className="w-5 h-5" />
@@ -60,7 +60,7 @@ export const CrisisModal: React.FC<CrisisModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 overflow-y-auto flex-1">
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
             {t.crisisModalDesc}
           </p>

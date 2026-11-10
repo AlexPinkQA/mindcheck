@@ -204,9 +204,9 @@ export default function App() {
   const result: AssessmentResult = evaluateAssessment(answers, mode, birthYear, language);
 
   return (
-    <div className="relative min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300 selection:bg-teal-500 selection:text-white">
+    <div className="relative min-h-screen min-h-[100dvh] bg-slate-50 dark:bg-slate-950 flex flex-col flex-1 font-sans text-slate-900 dark:text-slate-100 transition-colors duration-300 selection:bg-teal-500 selection:text-white w-full overflow-x-hidden">
       {/* Modern Ambient Radial Glows */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden flex justify-center -z-10">
+      <div className="pointer-events-none fixed inset-0 overflow-hidden flex justify-center -z-10 w-full h-full">
         <div className="w-[600px] h-[350px] bg-teal-500/10 dark:bg-teal-500/15 blur-[120px] rounded-full -top-24 left-1/4 transform -translate-x-1/2" />
         <div className="w-[500px] h-[300px] bg-cyan-500/10 dark:bg-cyan-500/15 blur-[120px] rounded-full top-48 right-1/4 transform translate-x-1/2" />
       </div>
@@ -220,10 +220,10 @@ export default function App() {
         onToggleDarkMode={() => setDarkMode((prev) => !prev)}
       />
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col justify-center">
+      <main className="flex-1 max-w-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col justify-start">
         {/* Welcome / Home Stage */}
         {stage === 'welcome' && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-6 animate-fade-in my-auto">
             {/* Hero Card */}
             <div className="relative overflow-hidden bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-3xl p-6 sm:p-9 border border-slate-200/80 dark:border-slate-800 shadow-xl shadow-slate-200/40 dark:shadow-none space-y-7">
               <div className="space-y-3.5">
@@ -242,38 +242,40 @@ export default function App() {
               </div>
 
               {/* Quick Settings Profile Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs font-semibold">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[11px]">{t.languageLabel}:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 sm:p-3.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs font-semibold">
+                <div className="flex items-center justify-between sm:justify-start gap-2">
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">{t.languageLabel}:</span>
                   <button
                     type="button"
                     onClick={() => handleOpenSetup('language')}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs"
                   >
-                    <Globe className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-                    <span>{language === 'uk' ? '🇺🇦 Українська' : language === 'en' ? '🇬🇧 English' : language === 'es' ? '🇪🇸 Español' : '🇵🇹 Português'}</span>
+                    <Globe className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+                    <span className="whitespace-nowrap">{language === 'uk' ? '🇺🇦 Українська' : language === 'en' ? '🇬🇧 English' : language === 'es' ? '🇪🇸 Español' : '🇵🇹 Português'}</span>
                   </button>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[11px]">{t.birthYearLabel}:</span>
-                  <button
-                    type="button"
-                    onClick={() => handleOpenSetup('birth_year')}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs"
-                  >
-                    <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-                    <span>{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
-                  </button>
+                <div className="flex items-center justify-between sm:justify-end gap-2">
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">{t.birthYearLabel}:</span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenSetup('birth_year')}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs"
+                    >
+                      <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+                      <span className="whitespace-nowrap">{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleOpenSetup('language')}
-                    className="p-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition cursor-pointer shadow-2xs"
-                    title={t.setupTooltip}
-                  >
-                    <Sliders className="w-4 h-4" />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenSetup('language')}
+                      className="p-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition cursor-pointer shadow-2xs shrink-0"
+                      title={t.setupTooltip}
+                    >
+                      <Sliders className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -308,7 +310,7 @@ export default function App() {
                     }`}
                   >
                     <span>🌧️</span>
-                    <span className="truncate">{t.sectionMood}</span>
+                    <span className="whitespace-nowrap">{t.sectionMood}</span>
                   </button>
 
                   <button
@@ -324,7 +326,7 @@ export default function App() {
                     }`}
                   >
                     <span>⚖️</span>
-                    <span className="truncate">{t.sectionStress}</span>
+                    <span className="whitespace-nowrap">{t.sectionStress}</span>
                   </button>
 
                   <button
@@ -340,7 +342,7 @@ export default function App() {
                     }`}
                   >
                     <span>🛡️</span>
-                    <span className="truncate">{t.sectionTrauma}</span>
+                    <span className="whitespace-nowrap">{t.sectionTrauma}</span>
                   </button>
                 </div>
 
@@ -589,7 +591,7 @@ export default function App() {
 
         {/* Assessment Stage (Questions) */}
         {stage === 'assessment' && currentQuestion && (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in my-auto">
             <AssessmentProgress
               currentStep={currentStep}
               totalSteps={questions.length}
