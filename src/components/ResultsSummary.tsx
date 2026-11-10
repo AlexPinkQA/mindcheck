@@ -502,11 +502,12 @@ ${t.selectedFormat}: ${modeBadge.label}
 
             {/* PC-PTSD-5 Visual Gauge */}
             <div className="space-y-1.5 pt-2">
-              <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+              <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                 <span>0 ({t.gaugeMin})</span>
-                <span>2</span>
-                <span className="text-amber-600 dark:text-amber-400 font-bold">3 ({t.pcPtsdCutoffLabel})</span>
-                <span>5</span>
+                <span className="text-amber-600 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800 text-[10px] sm:text-[11px] whitespace-nowrap">
+                  {t.pcPtsdCutoffLabel}
+                </span>
+                <span>5 ({t.gaugeSev})</span>
               </div>
               <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
                 <div
@@ -559,11 +560,12 @@ ${t.selectedFormat}: ${modeBadge.label}
 
               {/* PCL-5 Visual Gauge */}
               <div className="space-y-1.5 pt-2">
-                <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                   <span>0 ({t.gaugeMin})</span>
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">33 ({t.pclCutoffLabel})</span>
-                  <span>50 ({t.gaugeSev})</span>
-                  <span>80</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200/80 dark:border-amber-800 text-[10px] sm:text-[11px] whitespace-nowrap">
+                    {t.pclCutoffLabel}
+                  </span>
+                  <span>80 ({t.gaugeSev})</span>
                 </div>
                 <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
                   <div
