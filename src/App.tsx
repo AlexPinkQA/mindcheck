@@ -10,7 +10,7 @@ import { getQuestions } from './data/questions';
 import { evaluateAssessment, saveDraft, loadDraft, clearDraft } from './core/engine';
 import { AssessmentCategory, AssessmentMode, AssessmentResult } from './types/assessment';
 import { Language, translations } from './data/translations';
-import { ShieldCheck, ArrowRight, Brain, Sliders, Globe, Calendar, Zap, Microscope, Activity, Shield, Check } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Brain, Globe, Calendar, Zap, Microscope, Activity, Shield, Check } from 'lucide-react';
 
 const getCategoryForMode = (m: AssessmentMode): AssessmentCategory => {
   if (m === 'express' || m === 'deep') return 'mood';
@@ -241,42 +241,43 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Quick Settings Profile Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-3 sm:p-3.5 rounded-2xl bg-slate-50/90 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700/80 text-xs font-semibold">
-                <div className="flex items-center justify-between sm:justify-start gap-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">{t.languageLabel}:</span>
-                  <button
-                    type="button"
-                    onClick={() => handleOpenSetup('language')}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs"
-                  >
-                    <Globe className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-                    <span className="whitespace-nowrap">{language === 'uk' ? '🇺🇦 Українська' : language === 'en' ? '🇬🇧 English' : language === 'es' ? '🇪🇸 Español' : '🇵🇹 Português'}</span>
-                  </button>
-                </div>
-
-                <div className="flex items-center justify-between sm:justify-end gap-2 min-w-0">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">{t.birthYearLabel}:</span>
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenSetup('birth_year')}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs truncate max-w-full"
-                    >
-                      <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-                      <span className="truncate">{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => handleOpenSetup('language')}
-                      className="p-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-500 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-500 transition cursor-pointer shadow-2xs shrink-0"
-                      title={t.setupTooltip}
-                    >
-                      <Sliders className="w-3.5 h-3.5" />
-                    </button>
+              {/* Quick Settings Profile Bar (Apple Health / Alan inspired clean paired chips) */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-3 p-1.5 sm:p-2 rounded-2xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/60">
+                <button
+                  type="button"
+                  onClick={() => handleOpenSetup('language')}
+                  className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 hover:border-teal-500 dark:hover:border-teal-400 transition text-left shadow-2xs cursor-pointer group min-w-0"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 group-hover:bg-teal-100 dark:group-hover:bg-teal-900/60 transition">
+                    <Globe className="w-4 h-4" />
                   </div>
-                </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 truncate">
+                      {t.languageLabel}
+                    </div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                      {language === 'uk' ? '🇺🇦 Українська' : language === 'en' ? '🇬🇧 English' : language === 'es' ? '🇪🇸 Español' : '🇵🇹 Português'}
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleOpenSetup('birth_year')}
+                  className="flex items-center gap-2.5 p-2 sm:p-2.5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 hover:border-teal-500 dark:hover:border-teal-400 transition text-left shadow-2xs cursor-pointer group min-w-0"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950/80 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0 group-hover:bg-teal-100 dark:group-hover:bg-teal-900/60 transition">
+                    <Calendar className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 truncate">
+                      {t.birthYearLabel}
+                    </div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 truncate">
+                      {birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}
+                    </div>
+                  </div>
+                </button>
               </div>
 
               {/* Main Thematic Assessment Selection */}
