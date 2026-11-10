@@ -255,16 +255,16 @@ export default function App() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-2">
+                <div className="flex items-center justify-between sm:justify-end gap-2 min-w-0">
                   <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider text-[10px] sm:text-[11px] shrink-0">{t.birthYearLabel}:</span>
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 min-w-0">
                     <button
                       type="button"
                       onClick={() => handleOpenSetup('birth_year')}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-teal-500 transition font-bold cursor-pointer shadow-2xs text-xs truncate max-w-full"
                     >
                       <Calendar className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-                      <span className="whitespace-nowrap">{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
+                      <span className="truncate">{birthYear ? `${2026 - birthYear} ${t.yearsOldShort} (${birthYear})` : t.notSpecified}</span>
                     </button>
 
                     <button
@@ -281,11 +281,11 @@ export default function App() {
 
               {/* Main Thematic Assessment Selection */}
               <div className="space-y-3.5 pt-1">
-                <div className="flex items-center justify-between px-0.5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <div className="flex items-center justify-between gap-2 px-0.5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 whitespace-nowrap">
                     {t.selectModeTitle}
                   </span>
-                  <span className="text-xs font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-200/60 dark:border-teal-800">
+                  <span className="text-[11px] sm:text-xs font-bold text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2.5 py-0.5 rounded-full border border-teal-200/60 dark:border-teal-800 whitespace-nowrap shrink-0">
                     {mode === 'express' && t.expressBadge}
                     {mode === 'deep' && t.deepBadge}
                     {mode === 'dass21' && t.dassBadge}
