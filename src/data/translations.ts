@@ -134,6 +134,11 @@ export interface TranslationStrings {
   screenPositiveDesc: string;
   screenNegativeDesc: string;
   cutoffThresholdLabel: string;
+  scoringCriteriaTitle: string;
+  pcPtsdCutoffLabel: string;
+  pcPtsdThresholdNote: string;
+  pclCutoffLabel: string;
+  pclThresholdNote: string;
   clustersBreakdownTitle: string;
 }
 
@@ -269,6 +274,11 @@ export const translations: Record<Language, TranslationStrings> = {
     screenPositiveDesc: 'Результат (≥ 3 балів) вказує на клінічно значущі ознаки травматичного дистресу. Рекомендовано детальне обстеження (наприклад, шкалу PCL-5) та консультацію фахівця.',
     screenNegativeDesc: 'Кількість симптомів нижче клінічного порогу (3 бали). Ознак гострого посттравматичного дистресу не виявлено.',
     cutoffThresholdLabel: 'Клінічний поріг (DSM-5: 33 бали)',
+    scoringCriteriaTitle: 'Критерій інтерпретації',
+    pcPtsdCutoffLabel: 'Клінічний поріг: 3 з 5',
+    pcPtsdThresholdNote: 'У скринінгу PC-PTSD-5 оцінюються 5 симптомів (максимум 5 балів). За стандартом DSM-5 клінічним порогом є 3 ствердні відповіді: результат ≥ 3 балів вказує на ймовірний посттравматичний стрес і доцільність проходження повної клінічної шкали PCL-5 (де максимум 80 балів, а клінічний поріг становить 33 бали).',
+    pclCutoffLabel: 'Клінічний поріг (DSM-5: ≥ 33 з 80)',
+    pclThresholdNote: 'У повній шкалі PCL-5 сумарний бал 33 або вище (з 80 можливих) є визнаним орієнтиром DSM-5 для ймовірної наявності ПТСР та необхідності фахової психотерапії.',
     clustersBreakdownTitle: 'Розподіл симптомів за кластерами DSM-5',
   },
   en: {
@@ -402,6 +412,11 @@ export const translations: Record<Language, TranslationStrings> = {
     screenPositiveDesc: 'Score (≥ 3 points) indicates clinically significant signs of post-traumatic distress. Further evaluation (such as PCL-5) and specialist consultation are recommended.',
     screenNegativeDesc: 'Symptom count is below the clinical cutoff (3 points). No signs of acute post-traumatic distress detected.',
     cutoffThresholdLabel: 'Clinical cutoff (DSM-5: 33 points)',
+    scoringCriteriaTitle: 'Scoring criteria',
+    pcPtsdCutoffLabel: 'Screening cutoff: 3 of 5',
+    pcPtsdThresholdNote: 'PC-PTSD-5 evaluates 5 core symptoms (maximum 5 points). Per DSM-5 validation, 3 affirmative answers serve as the clinical cutoff: a score of ≥ 3 indicates probable post-traumatic stress and suggests taking the comprehensive PCL-5 assessment (where maximum score is 80 and the clinical cutoff is 33 points).',
+    pclCutoffLabel: 'Clinical cutoff (DSM-5: ≥ 33 of 80)',
+    pclThresholdNote: 'In the full PCL-5 scale, a score of 33 or higher (out of 80) is the established DSM-5 benchmark indicating probable PTSD and advising professional consultation.',
     clustersBreakdownTitle: 'Symptom Breakdown by DSM-5 Clusters',
   },
   es: {
@@ -535,6 +550,11 @@ export const translations: Record<Language, TranslationStrings> = {
     screenPositiveDesc: 'El puntaje (≥ 3 puntos) indica signos clínicamente significativos de distrés postraumático. Se recomienda una evaluación más detallada (como PCL-5) y consulta con un especialista.',
     screenNegativeDesc: 'La cantidad de síntomas está por debajo del umbral clínico (3 puntos). No se detectaron signos de distrés postraumático agudo.',
     cutoffThresholdLabel: 'Umbral clínico (DSM-5: 33 puntos)',
+    scoringCriteriaTitle: 'Criterio de interpretación',
+    pcPtsdCutoffLabel: 'Umbral de detección: 3 de 5',
+    pcPtsdThresholdNote: 'En el cribado PC-PTSD-5 se evalúan 5 síntomas (máximo 5 puntos). Según el DSM-5, el umbral clínico es de 3 respuestas afirmativas: una puntuación ≥ 3 indica probable distrés postraumático y sugiere realizar la escala completa PCL-5 (con máximo de 80 puntos y umbral clínico de 33 puntos).',
+    pclCutoffLabel: 'Umbral clínico (DSM-5: ≥ 33 de 80)',
+    pclThresholdNote: 'En la escala completa PCL-5, una puntuación total de 33 o superior (sobre 80) es el punto de corte estándar del DSM-5 que indica probable TEPT y aconseja evaluación especializada.',
     clustersBreakdownTitle: 'Distribución de síntomas por grupos del DSM-5',
   },
   pt: {
@@ -668,6 +688,11 @@ export const translations: Record<Language, TranslationStrings> = {
     screenPositiveDesc: 'A pontuação (≥ 3 pontos) indica sinais clinicamente significativos de estresse pós-traumático. Recomenda-se avaliação detalhada (como PCL-5) e consulta com especialista.',
     screenNegativeDesc: 'A contagem de sintomas está abaixo do limiar clínico (3 pontos). Não foram detectados sinais de estresse pós-traumático agudo.',
     cutoffThresholdLabel: 'Limiar clínico (DSM-5: 33 pontos)',
+    scoringCriteriaTitle: 'Critério de interpretação',
+    pcPtsdCutoffLabel: 'Limiar de rastreio: 3 de 5',
+    pcPtsdThresholdNote: 'No rastreio PC-PTSD-5 avaliam-se 5 sintomas (máximo de 5 pontos). Conforme o DSM-5, o limiar é de 3 respostas afirmativas: um resultado ≥ 3 indica provável stress pós-traumático e aconselha a escala clínica completa PCL-5 (com máximo de 80 pontos e limiar clínico de 33 pontos).',
+    pclCutoffLabel: 'Limiar clínico (DSM-5: ≥ 33 de 80)',
+    pclThresholdNote: 'Na escala completa PCL-5, uma pontuação de 33 ou mais (em 80 possíveis) é a referência clínica do DSM-5 que indica provável PTSR e necessidade de acompanhamento profissional.',
     clustersBreakdownTitle: 'Distribuição de sintomas por grupos do DSM-5',
   }
 };

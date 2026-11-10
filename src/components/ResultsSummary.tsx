@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AssessmentResult, SeverityLevel } from '../types/assessment';
-import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check, Sparkles, ArrowRight, ShieldCheck, ShieldAlert, Layers } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, RotateCcw, Heart, Copy, Check, Sparkles, ArrowRight, ShieldCheck, ShieldAlert, Layers, Info } from 'lucide-react';
 import { Language, translations } from '../data/translations';
 
 interface ResultsSummaryProps {
@@ -501,7 +501,7 @@ ${t.selectedFormat}: ${modeBadge.label}
               <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                 <span>0 ({t.gaugeMin})</span>
                 <span>2</span>
-                <span className="text-amber-600 dark:text-amber-400 font-bold">3 ({t.cutoffThresholdLabel})</span>
+                <span className="text-amber-600 dark:text-amber-400 font-bold">3 ({t.pcPtsdCutoffLabel})</span>
                 <span>5</span>
               </div>
               <div className="h-3 w-full bg-slate-200/70 dark:bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-200/60 dark:border-slate-700">
@@ -513,6 +513,15 @@ ${t.selectedFormat}: ${modeBadge.label}
                   }`}
                   style={{ width: `${traumaPercent}%` }}
                 />
+              </div>
+            </div>
+
+            {/* PC-PTSD-5 Clinical Threshold Explanation Note */}
+            <div className="p-3 sm:p-3.5 bg-white/80 dark:bg-slate-900/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed shadow-2xs">
+              <Info className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{t.scoringCriteriaTitle}: </span>
+                <span>{t.pcPtsdThresholdNote}</span>
               </div>
             </div>
           </div>
@@ -548,7 +557,7 @@ ${t.selectedFormat}: ${modeBadge.label}
               <div className="space-y-1.5 pt-2">
                 <div className="flex justify-between text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                   <span>0 ({t.gaugeMin})</span>
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">33 ({t.cutoffThresholdLabel})</span>
+                  <span className="text-amber-600 dark:text-amber-400 font-bold">33 ({t.pclCutoffLabel})</span>
                   <span>50 ({t.gaugeSev})</span>
                   <span>80</span>
                 </div>
@@ -557,6 +566,15 @@ ${t.selectedFormat}: ${modeBadge.label}
                     className={`h-full rounded-full transition-all duration-700 ease-out shadow-xs ${severityBarGradient[result.traumaLevel || 'minimal']}`}
                     style={{ width: `${traumaPercent}%` }}
                   />
+                </div>
+              </div>
+
+              {/* PCL-5 Clinical Threshold Explanation Note */}
+              <div className="p-3 sm:p-3.5 bg-white/80 dark:bg-slate-900/70 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed shadow-2xs">
+                <Info className="w-4 h-4 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{t.scoringCriteriaTitle}: </span>
+                  <span>{t.pclThresholdNote}</span>
                 </div>
               </div>
             </div>
